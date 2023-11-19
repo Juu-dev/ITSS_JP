@@ -9,11 +9,6 @@ export const navigations = [
     path: "/apartments",
   },
   {
-    name: "Room",
-    icon: "home",
-    path: "/apartments/:id/rooms",
-  },
-  {
     name: "Tenants",
     icon: "account_box",
     path: "/tenants/default",
