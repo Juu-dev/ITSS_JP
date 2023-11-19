@@ -114,7 +114,6 @@ const Invoices = () => {
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
               <Title>Invoices Management</Title>
-              <SubTitle>Paid invoices</SubTitle>
             </Card>
           </Grid>
 
