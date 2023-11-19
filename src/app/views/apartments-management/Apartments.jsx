@@ -11,6 +11,7 @@ import {
 import { Fragment } from "react";
 import { Breadcrumb } from "app/components";
 import { topBarHeight } from "app/utils/constant";
+import { Link } from "react-router-dom";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -103,12 +104,17 @@ const Apartments = () => {
 
           <BoxCustom>
             <SearchContainer>
-              <SearchInput type="text" placeholder="Search here..." autoFocus />
+              <SearchInput
+                type="text"
+                placeholder="Search here..."
+                autoFocus
+              />
               <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
                 <Icon sx={{ color: textColor }}>close</Icon>
               </IconButton>
             </SearchContainer>
           </BoxCustom>
+
           <BoxCustom>
             <StyledButton variant="contained" color="primary">
               Submit
@@ -116,16 +122,18 @@ const Apartments = () => {
           </BoxCustom>
 
           {data.map((item, index) => (
-            <Grid item lg={4} md={4} sm={12} xs={12}>
-              <Card sx={{ px: 3, py: 2, mb: 3 }}>
-                <Title>Name: Can so ho 1</Title>
-                <SubTitle>Location: Toa nha dong loi</SubTitle>
-                <SubTitle>Num of rooms: 14A12</SubTitle>
-                <ImgaeCustom
-                  src="/assets/images/anh-phong-ngu.jpg"
-                  alt="Anh phong ngu"
-                />
-              </Card>
+            <Grid item lg={4} md={4} sm={12} xs={12} key={index}>
+              <Link to={`/apartments/${index}/rooms`}>
+                <Card sx={{ px: 3, py: 2, mb: 3 }}>
+                  <Title>Name: Can so ho 1</Title>
+                  <SubTitle>Location: Toa nha dong loi</SubTitle>
+                  <SubTitle>Num of rooms: 14A12</SubTitle>
+                  <ImgaeCustom
+                    src="/assets/images/anh-phong-ngu.jpg"
+                    alt="Anh phong ngu"
+                  />
+                </Card>
+              </Link>
             </Grid>
           ))}
         </Grid>
@@ -135,3 +143,4 @@ const Apartments = () => {
 };
 
 export default Apartments;
+

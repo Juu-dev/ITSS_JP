@@ -6,7 +6,7 @@ const Apartments = Loadable(lazy(() => import("./Apartments")));
 
 const apartmentsRoutes = [
   {
-    path: "/apartments/default",
+    path: "/apartments",
     element: <Apartments />,
     auth: authRoles.admin,
   },
