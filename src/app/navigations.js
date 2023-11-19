@@ -1,5 +1,21 @@
 export const navigations = [
+  { label: "ITSS", type: "label" },
   { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
+  {
+    name: "Apartments",
+    icon: "account_balance",
+    path: "/apartments/default",
+  },
+  {
+    name: "Tenants",
+    icon: "account_box",
+    path: "/tenants/default",
+  },
+  {
+    name: "Invoices",
+    icon: "receipt",
+    path: "/invoices/default",
+  },
   { label: "PAGES", type: "label" },
   {
     name: "Session/Auth",
@@ -51,10 +67,5 @@ export const navigations = [
     icon: "launch",
     type: "extLink",
     path: "http://demos.ui-lib.com/matx-react-doc/",
-  },
-  {
-    name: "アパート管理",
-    icon: "account_balance",
-    path: "/apartments/default",
   },
 ];
