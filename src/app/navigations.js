@@ -57,4 +57,9 @@ export const navigations = [
     icon: "account_balance",
     path: "/apartments/default",
   },
+  {
+    name: "アパートメントのリスト",
+    icon: "menu",
+    path: "/apartments/list",
+  },
 ];
