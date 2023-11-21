@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 import MatxLayout from "./components/MatxLayout/MatxLayout";
 
 import apartmentsRoutes from "app/views/apartments-management/ApartmentsRoutes";
-
+import roomRoutes from "./views/room/RoomRoutes";
 import tenantsRoutes from "./views/tenants/TenantsRoutes";
 import invoicesRoutes from "app/views/invoices/InvoicesRoutes";
 
@@ -25,6 +25,7 @@ const routes = [
       ...materialRoutes,
       ...apartmentsRoutes,
       ...tenantsRoutes,
+      ...roomRoutes,
       ...invoicesRoutes,
     ],
   },

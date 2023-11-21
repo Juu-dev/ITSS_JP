@@ -1,10 +1,12 @@
+
 export const navigations = [
+
   { label: "ITSS", type: "label" },
   { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
   {
     name: "Apartments",
     icon: "account_balance",
-    path: "/apartments/default",
+    path: "/apartments",
   },
   {
     name: "Tenants",
