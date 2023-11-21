@@ -1,4 +1,3 @@
-import { Paid } from "@mui/icons-material";
 import {
   Box,
   Icon,
@@ -12,6 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useState } from "react";
+import { useApiData } from "./useApiData";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -23,27 +23,11 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const subscribarList = [
-  {
-    name: "Sophie Turner",
-    date: "15 May, 2023",
-    amount: 980,
-    deadline: "15 May, 2023",
-    apartment: "Investment Pros LLC",
-  },
-  {
-    name: "Ethan Parker",
-    date: "7 July, 2024",
-    amount: 1200,
-    deadline: "7 July, 2024",
-    apartment: "Wealth Strategists Inc.",
-  },
-];
-
 const PaidInvoices = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const { unpaidData, paidData } = useApiData();
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
@@ -59,23 +43,23 @@ const PaidInvoices = () => {
         <TableHead>
           <TableRow>
             <TableCell align="left">Name</TableCell>
-            <TableCell align="center">Apartment</TableCell>
-            <TableCell align="center">Date created</TableCell>
-            <TableCell align="center">Deadline</TableCell>
+            <TableCell align="center">Room Num</TableCell>
+            <TableCell align="center">Payment method</TableCell>
             <TableCell align="center">Amount</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {subscribarList
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((subscriber, index) => (
+          {paidData
+            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            ?.map((subscriber, index) => (
               <TableRow key={index}>
                 <TableCell align="left">{subscriber.name}</TableCell>
-                <TableCell align="center">{subscriber.apartment}</TableCell>
-                <TableCell align="center">{subscriber.date}</TableCell>
-                <TableCell align="center">{subscriber.deadline}</TableCell>
-                <TableCell align="center">${subscriber.amount}</TableCell>
+                <TableCell align="center">{subscriber.room_number}</TableCell>
+                <TableCell align="center">
+                  {subscriber.payment_method}
+                </TableCell>
+                <TableCell align="center">{subscriber.total}</TableCell>
                 <TableCell align="right">
                   <IconButton>
                     <Icon color="error">close</Icon>
@@ -91,7 +75,7 @@ const PaidInvoices = () => {
         page={page}
         component="div"
         rowsPerPage={rowsPerPage}
-        count={subscribarList.length}
+        count={paidData?.length}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}
