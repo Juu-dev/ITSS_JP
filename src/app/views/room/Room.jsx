@@ -8,10 +8,11 @@ import {
     Icon,
     Button,
 } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Breadcrumb } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import { useParams } from "react-router-dom";
+import axiosInstance from "axios";
 
 const Title = styled("div")(() => ({
     fontSize: "2rem",
@@ -85,8 +86,24 @@ const Room = () => {
     const textColor = palette.text.primary;
     const { id } = useParams();
 
-    const data = [1, 2, 3, 4, 5];
+    const [data, setData] = useState([]);
 
+    useEffect(() => {
+        async function fetchData() {
+            const res = await axiosInstance.get(`http://localhost:8000/api/apartments/${id}`);
+            let data = res.data;
+            if (res.status === 200) {
+                const res1 = await axiosInstance.get(`http://localhost:8000/api/apartments`);
+                for (let apartment of res1.data) {
+                    if (apartment.id === data[0].apartment_id) {
+                        data[0].apartment_name = apartment.name;
+                    }
+                }
+                setData(data)
+            }
+        }
+        fetchData();
+    }, []);
     return (
         <Fragment>
             <Container className="room">
@@ -99,7 +116,7 @@ const Room = () => {
                 <Grid container spacing={3}>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
-                            <Title>Can ho so {id}</Title>
+                            <Title>{data[0]?.apartment_name}</Title>
                         </Card>
                     </Grid>
 
@@ -120,12 +137,13 @@ const Room = () => {
                     {data.map((item, index) => (
                         <Grid item lg={4} md={4} sm={12} xs={12}>
                             <Card sx={{ px: 3, py: 2, mb: 3 }}>
-                                <Title>Number: 401</Title>
-                                <SubTitle>Status:</SubTitle>
-                                <SubTitle>Type:</SubTitle>
-                                <SubTitle>Description: </SubTitle>
+                                <Title>Number: {item.room_number}</Title>
+                                <SubTitle>Status: {item.rent_status}</SubTitle>
+                                <SubTitle>Type: {item.room_type.type}</SubTitle>
+                                <SubTitle>Description: {item.room_type.description}</SubTitle>
+                                <SubTitle>Additional: {item.additional_info}</SubTitle>
                                 <ImgaeCustom
-                                    src="/assets/images/room-9.jpg"
+                                    src={item.room_medias[0].url}
                                     alt="Anh phong ngu"
                                 />
                             </Card>

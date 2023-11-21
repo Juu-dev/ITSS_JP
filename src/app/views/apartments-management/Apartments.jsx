@@ -123,7 +123,7 @@ const Apartments = () => {
 
           {data.map((item, index) => (
             <Grid item lg={4} md={4} sm={12} xs={12} key={index}>
-              <Link to={`/apartments/${index}/rooms`}>
+              <Link to={`/apartments/${index + 1}/rooms`}>
                 <Card sx={{ px: 3, py: 2, mb: 3 }}>
                   <Title>Name: Can so ho 1</Title>
                   <SubTitle>Location: Toa nha dong loi</SubTitle>
