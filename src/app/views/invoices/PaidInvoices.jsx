@@ -42,7 +42,7 @@ const PaidInvoices = () => {
       <StyledTable>
         <TableHead>
           <TableRow>
-            <TableCell align="left">Name</TableCell>
+            <TableCell align="left">Apartment Name</TableCell>
             <TableCell align="center">Room Num</TableCell>
             <TableCell align="center">Payment method</TableCell>
             <TableCell align="center">Amount</TableCell>
