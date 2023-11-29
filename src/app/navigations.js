@@ -26,6 +26,11 @@ export const navigations = [
     icon: "receipt",
     path: "/renter-popup",
   },
+  {
+    name: "Renter Modify Popup",
+    icon: "receipt",
+    path: "/renter-modify-popup",
+  },
   { label: "PAGES", type: "label" },
   {
     name: "Session/Auth",

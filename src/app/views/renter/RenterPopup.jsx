@@ -76,7 +76,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const RoomHistory = () => {
+const Renter = () => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -225,4 +225,4 @@ const DeletePopup = ({ showPopup }) => {
   );
 };
 
-export default RoomHistory;
+export default Renter;
