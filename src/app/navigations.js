@@ -1,6 +1,4 @@
-
 export const navigations = [
-
   { label: "ITSS", type: "label" },
   { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
   {
@@ -17,6 +15,11 @@ export const navigations = [
     name: "Invoices",
     icon: "receipt",
     path: "/invoices/default",
+  },
+  {
+    name: "Room History",
+    icon: "receipt",
+    path: "/room-history",
   },
   { label: "PAGES", type: "label" },
   {
