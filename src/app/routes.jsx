@@ -12,6 +12,7 @@ import roomRoutes from "./views/room/RoomRoutes";
 import tenantsRoutes from "./views/tenants/TenantsRoutes";
 import invoicesRoutes from "app/views/invoices/InvoicesRoutes";
 import roomHistoryRoutes from "./views/room-history/RoomHistoryRoutes";
+import renterPopupRoutes from "./views/renter/RenterPopupRoutes";
 
 const routes = [
   {
@@ -29,6 +30,7 @@ const routes = [
       ...roomRoutes,
       ...invoicesRoutes,
       ...roomHistoryRoutes,
+      ...renterPopupRoutes,
     ],
   },
   ...sessionRoutes,
