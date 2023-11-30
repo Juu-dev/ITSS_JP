@@ -14,6 +14,7 @@ import { useState } from "react";
 import axiosInstance from "axios";
 import { useParams } from "react-router-dom";
 import { Fragment, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -73,6 +74,7 @@ const TableCustom = () => {
             <TableCell align="center">Rental status</TableCell>
             <TableCell align="center">Room type</TableCell>
             <TableCell align="right">Additional imformation</TableCell>
+            <TableCell align="center">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -88,6 +90,13 @@ const TableCustom = () => {
                 </TableCell>
                 <TableCell align="center">
                   {subscriber.additional_info}
+                </TableCell>
+                <TableCell align="center">
+                  <Link to={`${subscriber.room_number}`}>
+                    <IconButton>
+                      <Icon color="primary">open_in_new</Icon>
+                    </IconButton>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
