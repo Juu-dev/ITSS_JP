@@ -92,7 +92,7 @@ const TableCustom = () => {
                   {subscriber.additional_info}
                 </TableCell>
                 <TableCell align="center">
-                  <Link to={`${subscriber.room_number}`}>
+                  <Link to={`${subscriber.id}`}>
                     <IconButton>
                       <Icon color="primary">open_in_new</Icon>
                     </IconButton>
