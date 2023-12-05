@@ -8,17 +8,17 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Input } from "@mui/material";
+import { useParams } from "react-router-dom";
+import axiosInstance from "axios";
 
 const style = {
   position: "absolute",
@@ -41,16 +41,49 @@ const Item = styled(Paper)(({ theme }) => ({
   marginBottom: "10px",
 }));
 
-const FormControlCustom = styled(FormControl)(({ theme }) => ({
-  marginTop: "10px" + "!important",
-}));
-
 const FormControlLabelCustom = styled(FormControlLabel)(({ theme }) => ({
   marginTop: "10px" + "!important",
 }));
+const dataDefault = {
+  name: "",
+  phone_number: "",
+  citizen_number: "",
+  gender: "", // ['Male', 'Other', 'Female']
+  email: "abc@gmail.com",
+  room_host: 0, //Có phải chủ phòng hay không
+  rent_type: "Rented", // ['Rented', 'Owned']
+  living_status: 0, //Có đang sống ở đấy hay không
+};
 
 export default function AddNewTenant() {
+  const params = useParams();
+
   const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState(dataDefault);
+  const handleChange = (event) => {
+    const dataExp = { ...data, [event.target.name]: event.target.value };
+    setData(dataExp);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    async function postData() {
+      try {
+        const res = await axiosInstance
+          .post(`http://localhost:8000/api/rooms/${params.room_id}/tenant`, {
+            data,
+          })
+          .then((res) => {
+            console.log(res.data);
+            window.location.reload();
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    postData();
+  };
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -97,37 +130,54 @@ export default function AddNewTenant() {
                 <Typography variant="subtitle1" component="h6">
                   <strong>Personal Information</strong>
                 </Typography>
-                <TextField
-                  size="small"
-                  variant="standard"
-                  required
-                  id="filled-required"
-                  label="Name"
-                  fullWidth
-                />
-                <TextField
-                  size="small"
-                  variant="standard"
-                  required
-                  id="filled-required"
-                  label="Gender"
-                  fullWidth
-                />
-                <TextField
-                  size="small"
-                  variant="standard"
-                  required
-                  id="standard-required"
-                  label="Tel"
-                  fullWidth
-                />
-                <TextField
-                  size="small"
-                  variant="standard"
-                  id="standard-required"
-                  label="Indentity Num"
-                  fullWidth
-                />
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="component-simple" required>
+                    Name
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="name"
+                    required
+                    value={data.name}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="component-simple" required>
+                    Gender
+                  </InputLabel>
+                  <Input
+                    name="gender"
+                    id="component-simple"
+                    required
+                    value={data.gender}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="component-simple" required>
+                    Tel
+                  </InputLabel>
+                  <Input
+                    name="phone_number"
+                    id="component-simple"
+                    required
+                    value={data.phone_number}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl variant="standard">
+                  <InputLabel htmlFor="component-simple" required>
+                    Citizen num
+                  </InputLabel>
+                  <Input
+                    name="citizen_number"
+                    id="component-simple"
+                    required
+                    value={data.citizen_number}
+                    onChange={handleChange}
+                  />
+                </FormControl>
               </Stack>
             </Item>
             <Item>
@@ -135,40 +185,20 @@ export default function AddNewTenant() {
                 <Typography variant="subtitle1" component="h6">
                   <strong>Room Information</strong>
                 </Typography>
-                <FormControlCustom variant="standard">
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Apartment
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="apartment"
-                    label="Apartment">
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControlCustom>
-                <FormControlCustom variant="standard">
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Room name
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="room"
-                    label="Room name">
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControlCustom>
+                <Typography variant="subtitle1" component="h6">
+                  Apartment: {params.id}
+                </Typography>
+                <Typography variant="subtitle1" component="h6">
+                  Room: {params.room_id}
+                </Typography>
                 <FormControlLabelCustom
-                  control={<Checkbox defaultChecked />}
+                  control={
+                    <Checkbox
+                      defaultChecked
+                      name="rent_type"
+                      onChange={handleChange}
+                    />
+                  }
                   label="Room host"
                 />
                 <Grid container spacing={2}>
@@ -196,7 +226,10 @@ export default function AddNewTenant() {
               <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}>
                 Save
               </Button>
             </Stack>

@@ -11,6 +11,7 @@ import { Fragment } from "react";
 import { topBarHeight } from "app/utils/constant";
 import TenantCard from "./TenantCard";
 import AddNewTenant from "./AddNewTenant";
+import { useParams } from "react-router-dom";
 
 const SearchContainer = styled("div")(({ theme }) => ({
   zIndex: 9,
@@ -52,8 +53,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function DetailTenant({ roomData }) {
+  const params = useParams();
+  const room_id = params.room_id;
   const roomDataDetail = roomData[0];
   const tenantData = roomDataDetail.tenants;
+  const tenantDataReal = [];
+  tenantData?.map((tenant) => {
+    if (tenant?.pivot.deleted_at === null) {
+      tenantDataReal.push(tenant);
+    }
+  });
 
   const { palette } = useTheme();
   const textColor = palette.text.primary;
@@ -86,7 +95,7 @@ export default function DetailTenant({ roomData }) {
             <StyledAddNewTenant />
           </SearchContainer>{" "}
         </Grid>
-        {tenantData?.map((tenant) => (
+        {tenantDataReal?.map((tenant) => (
           <Grid item xs={6}>
             <TenantCard key={tenant.id} data={tenant} />
           </Grid>

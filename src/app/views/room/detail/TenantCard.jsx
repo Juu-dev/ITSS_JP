@@ -49,7 +49,7 @@ export default function TenantCard({ data }) {
             <IconButton>
               <Icon>edit</Icon>
             </IconButton>
-            <DeleteWarning data={tenantData.id} />
+            <DeleteWarning data={tenantData} />
           </Grid>
         </Grid>
       </CardContent>

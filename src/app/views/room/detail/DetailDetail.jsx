@@ -38,7 +38,7 @@ export default function DetailDetail({ roomData }) {
             {data?.room_medias.map((item) => (
               <ImageListItem key={item.id}>
                 <img
-                  srcSet={`${item.urk}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                   src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
                   alt={item.id}
                   loading="lazy"

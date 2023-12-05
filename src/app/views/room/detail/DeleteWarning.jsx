@@ -6,6 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
 import { Button } from "@mui/material";
 import Stack from "@mui/material/Stack";
+import axiosInstance from "axios";
+import { useParams } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -20,10 +22,25 @@ const style = {
 };
 
 export default function DeleteWarning(data) {
+  const params = useParams();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const id = data.data;
+  const id = data?.data.id;
+  const handleDelete = async () => {
+    try {
+      const res = await axiosInstance
+        .delete(
+          `http://localhost:8000/api/rooms/${params.room_id}/tenant=${id}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          window.location.reload();
+        });
+    } catch (err) {
+      console.log("check", err);
+    }
+  };
 
   return (
     <div>
@@ -52,7 +69,7 @@ export default function DeleteWarning(data) {
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="contained" color="error">
+            <Button variant="contained" color="error" onClick={handleDelete}>
               Delete
             </Button>
           </Stack>
