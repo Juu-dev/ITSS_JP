@@ -12,6 +12,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import TableCustom from "./TableCustom";
+import ResidentPopup from "./ResidentPopup";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -87,6 +88,15 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const RoomHistory = () => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
+  const [addInsertFormOpen, setAddInsertFormOpen] = useState(false);
+
+  const handleOpenAddInsertForm = () => {
+    setAddInsertFormOpen(true);
+  };
+
+  const handleCloseAddInsertForm = () => {
+    setAddInsertFormOpen(false);
+  };
 
   return (
     <Fragment>
@@ -129,6 +139,7 @@ const RoomHistory = () => {
                 variant="contained"
                 color="primary"
                 sx={{ marginBottom: "20px" }}
+                onClick={handleOpenAddInsertForm}
               >
                 Add/Insert
               </StyledButton>
@@ -139,6 +150,12 @@ const RoomHistory = () => {
         <SimpleCard title="Room">
           <TableCustom />
         </SimpleCard>
+
+        <ResidentPopup
+          open={addInsertFormOpen}
+          onClose={handleCloseAddInsertForm}
+        />
+
       </Container>
     </Fragment>
   );
