@@ -12,6 +12,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import TableCustom from "./TableCustom";
+import axiosInstance from "axios";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -76,7 +77,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const Renter = () => {
+const RenterPopup = ({ handleClose, handleOpenModify, data }) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -88,13 +89,13 @@ const Renter = () => {
 
   return (
     <Fragment>
-      <Container className="invoices">
-        <Box className="breadcrumb">
+      <Container className="invoices" style={{ width: "500px" }}>
+        {/* <Box className="breadcrumb">
           <Breadcrumb routeSegments={[{ name: "renter", path: "/material" }]} />
-        </Box>
+        </Box> */}
 
         <Grid container spacing={5}>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
             <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
               <BoxCustom item lg={12} md={12} sm={12} xs={12}>
                 <Icon
@@ -104,10 +105,11 @@ const Renter = () => {
                     top: "-15px",
                     left: "-15px",
                   }}
+                  onClick={handleClose}
                 >
                   close
                 </Icon>
-                <Title>Room 501</Title>
+                <Title> {data.name || "Name Room"}</Title>
                 <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
                   <Icon
                     sx={{
@@ -119,7 +121,12 @@ const Renter = () => {
                   >
                     delete
                   </Icon>
-                  <Icon sx={{ color: textColor, cursor: "pointer" }}>edit</Icon>
+                  <Icon
+                    sx={{ color: textColor, cursor: "pointer" }}
+                    onClick={handleOpenModify}
+                  >
+                    edit
+                  </Icon>
                 </BoxCustomButton>
               </BoxCustom>
               <TitleCard>Personal Information</TitleCard>
@@ -132,10 +139,12 @@ const Renter = () => {
                   marginTop: "20px",
                 }}
               >
-                <Content>Gender: Fale</Content>
-                <Content>Tel: 123456789</Content>
-                <Content>Identification number: 3030300303</Content>
-                <Content>Email: anhdeptrai@gmail.com</Content>
+                <Content>Gender: {data?.gender || "Fale"}</Content>
+                <Content>Tel: {data?.tel || "123456789"}</Content>
+                <Content>
+                  Identification number: {data.id_number || "3030300303"}
+                </Content>
+                <Content>Email: {data.email || "anhdeptrai@gmail.com"}</Content>
               </Card>
 
               <TitleCard>Room Information</TitleCard>
@@ -148,9 +157,11 @@ const Renter = () => {
                   marginTop: "20px",
                 }}
               >
-                <Content>Room number: T102</Content>
-                <Content>Apartment name: CC01</Content>
-                <Content>Room host: Nguyen Van A</Content>
+                <Content>Room number: {data.room_number || "T102"}</Content>
+                <Content>
+                  Apartment name: {data.apartment_name || "CC01"}
+                </Content>
+                <Content>Room host: {data.room_host || "Nguyen Van A"}</Content>
               </Card>
             </Card>
           </Grid>
@@ -225,4 +236,4 @@ const DeletePopup = ({ showPopup }) => {
   );
 };
 
-export default Renter;
+export default RenterPopup;

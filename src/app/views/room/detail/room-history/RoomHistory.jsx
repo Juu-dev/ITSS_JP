@@ -101,20 +101,20 @@ const RoomHistory = () => {
   return (
     <Fragment>
       <Container className="invoices">
-        <Box className="breadcrumb">
+        {/* <Box className="breadcrumb">
           <Breadcrumb routeSegments={[{ name: "room", path: "/material" }]} />
-        </Box>
+        </Box> */}
 
         <Grid container spacing={5}>
           <Grid item lg={4} md={4} sm={4} xs={4}>
-            <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
+            {/* <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
               <Title>Room 501</Title>
             </Card>
             <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
               <Content>Apartment: 1</Content>
               <Content>Room: 501</Content>
               <Content>Room Type: Luxury</Content>
-            </Card>
+            </Card> */}
           </Grid>
           <Grid item lg={6.8} md={6.8} sm={6.8} xs={6.8}>
             <BoxCustom>
@@ -155,7 +155,6 @@ const RoomHistory = () => {
           open={addInsertFormOpen}
           onClose={handleCloseAddInsertForm}
         />
-
       </Container>
     </Fragment>
   );

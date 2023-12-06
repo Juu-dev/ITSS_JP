@@ -11,9 +11,6 @@ import apartmentsRoutes from "app/views/apartments-management/ApartmentsRoutes";
 import roomRoutes from "./views/room/RoomRoutes";
 import tenantsRoutes from "./views/tenants/TenantsRoutes";
 import invoicesRoutes from "app/views/invoices/InvoicesRoutes";
-import roomHistoryRoutes from "./views/room-history/RoomHistoryRoutes";
-import renterPopupRoutes from "./views/renter/RenterPopupRoutes";
-import renterModifyPopupRoutes from "./views/renter-modify/RenterModifyPopupRoutes";
 
 const routes = [
   {
@@ -30,9 +27,6 @@ const routes = [
       ...tenantsRoutes,
       ...roomRoutes,
       ...invoicesRoutes,
-      ...roomHistoryRoutes,
-      ...renterPopupRoutes,
-      ...renterModifyPopupRoutes,
     ],
   },
   ...sessionRoutes,

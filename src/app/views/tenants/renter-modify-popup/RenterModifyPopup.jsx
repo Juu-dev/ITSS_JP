@@ -82,7 +82,12 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const RoomModifyPopup = () => {
+const RoomModifyPopup = ({
+  handleCloseModify,
+  handleChange,
+  handleSubmit,
+  data,
+}) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -92,59 +97,15 @@ const RoomModifyPopup = () => {
     setShowDeletePopup(true);
   };
 
-  const [gender, setGender] = useState("Fale");
-  const [tel, setTel] = useState("0123456789");
-  const [ident, setIdent] = useState("123456789");
-  const [email, setEmail] = useState("deptraicogisai@gmail.com");
-  const [username, setUsername] = useState("");
-
-  const [roomNumber, setRoomNumber] = useState("501");
-  const [apartmentName, setApartmentName] = useState("A1");
-  const [roomHost, setRoomHost] = useState("Nguyen Van A");
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    switch (name) {
-      case "gender":
-        setGender(value);
-        break;
-      case "tel":
-        setTel(value);
-        break;
-      case "ident":
-        setIdent(value);
-        break;
-      case "email":
-        setEmail(value);
-        break;
-      case "roomNumber":
-        setRoomNumber(value);
-        break;
-      case "apartmentName":
-        setApartmentName(value);
-        break;
-      case "roomHost":
-        setRoomHost(value);
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const handleSubmit = () => {
-    console.log("submit");
-  };
-
   return (
     <Fragment>
-      <Container className="invoices">
-        <Box className="breadcrumb">
+      <Container className="invoices" style={{ width: "500px" }}>
+        {/* <Box className="breadcrumb">
           <Breadcrumb routeSegments={[{ name: "renter", path: "/material" }]} />
-        </Box>
+        </Box> */}
 
         <Grid container spacing={5}>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
             <Card sx={{ px: 3, py: 2, mb: 3, textAlign: "center" }}>
               <BoxCustom item lg={12} md={12} sm={12} xs={12}>
                 <Icon
@@ -154,10 +115,11 @@ const RoomModifyPopup = () => {
                     top: "-15px",
                     left: "-15px",
                   }}
+                  onClick={handleCloseModify}
                 >
                   close
                 </Icon>
-                <Title>Room 501</Title>
+                <Title>{data?.name}</Title>
                 {/* <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
                   <Icon
                     sx={{
@@ -197,8 +159,8 @@ const RoomModifyPopup = () => {
                     type="text"
                     name="gender"
                     id="standard-basic"
-                    value={gender || ""}
-                    onChange={handleChange}
+                    value={data?.gender || ""}
+                    onChange={(e) => handleChange(e)}
                     errorMessages={["this field is required"]}
                     label="Gender"
                     validators={["required"]}
@@ -207,7 +169,7 @@ const RoomModifyPopup = () => {
                     type="text"
                     name="tel"
                     id="standard-basic"
-                    value={tel || ""}
+                    value={data?.tel || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Telephone"
@@ -215,9 +177,9 @@ const RoomModifyPopup = () => {
                   />
                   <TextField
                     type="text"
-                    name="ident"
+                    name="id_number"
                     id="standard-basic"
-                    value={ident || ""}
+                    value={data?.id_number || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Identification number"
@@ -227,7 +189,7 @@ const RoomModifyPopup = () => {
                     type="text"
                     name="email"
                     id="standard-basic"
-                    value={email || ""}
+                    value={data?.email || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Email"
@@ -247,9 +209,9 @@ const RoomModifyPopup = () => {
                 >
                   <TextField
                     type="text"
-                    name="roomNumber"
+                    name="room_number"
                     id="standard-basic"
-                    value={roomNumber || ""}
+                    value={data?.room_number || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Room number"
@@ -257,9 +219,9 @@ const RoomModifyPopup = () => {
                   />
                   <TextField
                     type="text"
-                    name="apartmentName"
+                    name="apartment_name"
                     id="standard-basic"
-                    value={apartmentName || ""}
+                    value={data?.apartment_name || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Apartment name"
@@ -267,9 +229,9 @@ const RoomModifyPopup = () => {
                   />
                   <TextField
                     type="text"
-                    name="roomHost"
+                    name="room_host"
                     id="standard-basic"
-                    value={roomHost || ""}
+                    value={data?.room_host || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Room host"

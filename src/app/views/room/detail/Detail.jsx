@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import DetailTenant from "./DetailTenant";
 import DetailDetail from "./DetailDetail";
 import axiosInstance from "axios";
+import RoomHistory from "./room-history/RoomHistory";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -33,7 +34,8 @@ function CustomTabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}>
+      {...other}
+    >
       {value === index && (
         <Box sx={{ p: 3 }}>
           <Typography>{children}</Typography>
@@ -96,7 +98,8 @@ const Detail = () => {
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label="basic tabs example">
+            aria-label="basic tabs example"
+          >
             <Tab label="Detail" {...a11yProps(0)} />
             <Tab label="Tenants" {...a11yProps(1)} />
             <Tab label="Invoices" {...a11yProps(2)} />
@@ -113,7 +116,7 @@ const Detail = () => {
           Invoice
         </CustomTabPanel>
         <CustomTabPanel value={value} index={3}>
-          Rent History
+          <RoomHistory />
         </CustomTabPanel>
       </Container>
     </Fragment>

@@ -11,8 +11,12 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApiData } from "./useApiData";
+import Modal from "@mui/material/Modal";
+import axiosInstance from "axios";
+import RenterPopup from "./renter-popup/RenterPopup";
+import RoomModifyPopup from "./renter-modify-popup/RenterModifyPopup";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -28,8 +32,21 @@ const TenantsList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [idPopup, setIdPopup] = useState(null);
+  const [openModify, setOpenModify] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [dataPopup, setDataPopup] = useState({
+    name: "",
+    gender: "",
+    tel: "",
+    id_number: "",
+    email: "",
+    room_number: "",
+    apartment_name: "",
+    room_host: "",
+  });
+
   const { data } = useApiData();
-  console.log(data);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -39,6 +56,64 @@ const TenantsList = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleChange = (event) => {
+    const dataExp = { ...dataPopup, [event.target.name]: event.target.value };
+    setDataPopup(dataExp);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const dataPatch = {
+      name: dataPopup.name,
+      phone_number: dataPopup.tel,
+      citizen_number: dataPopup.id_number,
+      gender: dataPopup.gender,
+      email: dataPopup.email,
+    };
+
+    // patch data
+    const patchData = async () => {
+      await axiosInstance
+        .patch(`http://127.0.0.1:8000/api/tenants/${idPopup}`, dataPatch)
+        .then((res) => {
+          handleClose();
+        });
+    };
+    patchData();
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleOpenModify = () => setOpenModify(true);
+  const handleCloseModify = () => setOpenModify(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      await axiosInstance
+        .get(`http://127.0.0.1:8000/api/tenants/${idPopup}`)
+        .then((res) => {
+          const dataSource = res?.data[0];
+          const dataExp = {
+            name: dataSource?.name,
+            gender: dataSource?.gender,
+            tel: dataSource?.phone_number,
+            id_number: dataSource?.citizen_number,
+            email: dataSource?.email,
+            room_number: dataSource?.rooms[0]?.room_number,
+            apartment_name: dataSource?.rooms[0]?.apartment?.name,
+            room_host: dataSource?.rooms[0]?.pivot?.room_host,
+          };
+          setDataPopup(dataExp);
+        });
+    }
+    if (idPopup) {
+      fetchData();
+      console.log(dataPopup);
+    }
+  }, [idPopup]);
 
   return (
     <Box width="100%" overflow="auto">
@@ -57,7 +132,14 @@ const TenantsList = () => {
           {data
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((subscriber, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  handleOpen();
+                  setIdPopup(subscriber.id);
+                }}
+              >
                 <TableCell align="left">{subscriber.name}</TableCell>
                 <TableCell align="center">{subscriber.phone_number}</TableCell>
                 <TableCell align="center">
@@ -76,6 +158,33 @@ const TenantsList = () => {
             ))}
         </TableBody>
       </StyledTable>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        {!openModify ? (
+          <RenterPopup
+            handleClose={handleClose}
+            handleOpenModify={handleOpenModify}
+            data={dataPopup}
+          />
+        ) : (
+          <RoomModifyPopup
+            handleCloseModify={handleCloseModify}
+            data={dataPopup}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        )}
+      </Modal>
 
       <TablePagination
         sx={{ px: 2 }}
