@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import DetailTenant from "./DetailTenant";
 import DetailDetail from "./DetailDetail";
 import axiosInstance from "axios";
-import RoomHistory from "./room-history/RoomHistory";
+import RoomHistory from "../../tenants/room-history/RoomHistory";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",

@@ -13,6 +13,7 @@ import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import TenantsList from "./TenantsList";
 import React, { useState } from "react";
+import ResidentPopup from "./room-history/ResidentPopup";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -87,6 +88,16 @@ const Tenants = () => {
 
   const data = [1, 2, 3, 4, 5];
 
+  const [addInsertFormOpen, setAddInsertFormOpen] = useState(false);
+
+  const handleOpenAddInsertForm = () => {
+    setAddInsertFormOpen(true);
+  };
+
+  const handleCloseAddInsertForm = () => {
+    setAddInsertFormOpen(false);
+  };
+
   return (
     <Fragment>
       <Container className="tenants">
@@ -115,7 +126,11 @@ const Tenants = () => {
             </SearchContainer>
           </BoxCustom>
           <BoxCustom>
-            <StyledButton variant="contained" color="primary">
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={handleOpenAddInsertForm}
+            >
               Add new tenant
             </StyledButton>
           </BoxCustom>
@@ -123,6 +138,10 @@ const Tenants = () => {
         <SimpleCard title="Tenants List">
           <TenantsList />
         </SimpleCard>
+        <ResidentPopup
+          open={addInsertFormOpen}
+          onClose={handleCloseAddInsertForm}
+        />
       </Container>
     </Fragment>
   );
