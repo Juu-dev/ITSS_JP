@@ -69,16 +69,15 @@ export default function AddNewTenant() {
     event.preventDefault();
     async function postData() {
       try {
-        const res = await axiosInstance
-          .post(`http://localhost:8000/api/rooms/${params.room_id}/tenant`, {
-            data,
-          })
-          .then((res) => {
-            console.log(res.data);
-            window.location.reload();
-          });
-      } catch (err) {
-        console.log(err);
+        const response = await axiosInstance.post(
+          `http://localhost:8000/api/rooms/${params.room_id}/tenant`,
+          data
+        );
+        setOpen(false);
+        // reload
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
       }
     }
     postData();
@@ -104,7 +103,8 @@ export default function AddNewTenant() {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={style}>
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={6}>
@@ -124,7 +124,8 @@ export default function AddNewTenant() {
               "& .MuiTextField-root": { m: 1 },
             }}
             noValidate
-            autoComplete="off">
+            autoComplete="off"
+          >
             <Item>
               <Stack spacing={4}>
                 <Typography variant="subtitle1" component="h6">
@@ -222,14 +223,16 @@ export default function AddNewTenant() {
               spacing={4}
               direction="row"
               alignItems="flex-end"
-              justifyContent="center">
+              justifyContent="center"
+            >
               <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleSubmit}>
+                onClick={handleSubmit}
+              >
                 Save
               </Button>
             </Stack>
