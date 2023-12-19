@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useApiData } from "./useApiData";
-import InvoicePopup from "./invoice-popup/InvoicePopup";
-import InvoiceModifyPopup from "./invoice-modify-popup/InvoiceModifyPopup";
-import Modal from "@mui/material/Modal";
 import axiosInstance from "axios";
+import Modal from "@mui/material/Modal";
+import InvoiceDetail from "./popup/InvoiceDetail";
+import InvoiceEdit from "./popup/InvoiceEdit";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -27,27 +27,30 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const PaidInvoices = () => {
+const UnpaidInvoice = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const { unpaidData, paidData } = useApiData();
+
   const [idPopup, setIdPopup] = useState(null);
   const [openModify, setOpenModify] = useState(false);
-  const { unpaidData, paidData } = useApiData();
   const [open, setOpen] = useState(false);
   const [dataPopup, setDataPopup] = useState({
-    gender: "",
-    tel: "",
-    id_number: "",
-    email: "",
-    room_num: "",
+    id: "",
+    name: "",
+    room: "",
     apartment_name: "",
-    payment_method: "",
-    pay_at: "",
-    elect: "",
-    service: "",
+    tel: "",
+    email: "",
+    create_at: "",
+    deadline: "",
     water: "",
+    service: "",
+    rent: "",
+    electricity: "",
     total: "",
+    pay_at: "",
   });
 
   const handleChangePage = (_, newPage) => {
@@ -67,13 +70,23 @@ const PaidInvoices = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const total =
+      parseInt(dataPopup?.water) +
+      parseInt(dataPopup?.service) +
+      parseInt(dataPopup?.rent) +
+      parseInt(dataPopup?.electricity);
+
     const dataPatch = {
-      name: dataPopup.name,
-      phone_number: dataPopup.tel,
-      citizen_number: dataPopup.id_number,
-      gender: dataPopup.gender,
-      email: dataPopup.email,
+      room_id: dataPopup?.room_id,
+      deadline: dataPopup?.deadline,
+      pay_at: null,
+      water: dataPopup?.water,
+      service: dataPopup?.service,
+      rent: dataPopup?.rent,
+      total: total,
+      payment_method: "MasterCard",
     };
+    console.log("check", dataPatch);
 
     // patch data
     const patchData = async () => {
@@ -84,6 +97,7 @@ const PaidInvoices = () => {
         });
     };
     patchData();
+    handleCloseModify();
   };
 
   const handleOpen = () => setOpen(true);
@@ -98,23 +112,21 @@ const PaidInvoices = () => {
         .get(`http://127.0.0.1:8000/api/payments/${idPopup}`)
         .then((res) => {
           const dataSource = res?.data[0];
-
-          console.log(dataSource);
-
           const dataExp = {
-            gender: dataSource?.gender,
-            tel: dataSource?.phone_number,
-            id_number: dataSource?.citizen_number,
-            email: dataSource?.email,
-            room_num: dataSource?.room?.room_number,
-            apartment_name: dataSource?.room?.apartment?.name,
-            payment_method: dataSource?.payment_method,
-            pay_at: dataSource?.pay_at,
-
-            elect: dataSource?.elect,
-            service: dataSource?.service,
+            room_id: dataSource?.room_id,
+            name: dataSource?.room.tenants[0]?.name,
+            room: dataSource?.room.room_number,
+            apartment_name: dataSource?.room.apartment.name,
+            tel: dataSource?.room.tenants[0]?.phone_number,
+            email: dataSource?.room.tenants[0]?.email,
+            create_at: dataSource?.created_at,
+            deadline: dataSource?.deadline,
             water: dataSource?.water,
+            service: dataSource?.service,
+            rent: dataSource?.rent,
+            electricity: dataSource?.electricity,
             total: dataSource?.total,
+            pay_at: dataSource?.pay_at,
           };
           setDataPopup(dataExp);
         });
@@ -132,7 +144,7 @@ const PaidInvoices = () => {
           <TableRow>
             <TableCell align="left">Apartment Name</TableCell>
             <TableCell align="center">Room Num</TableCell>
-            <TableCell align="center">Payment method</TableCell>
+            <TableCell align="center">Deadline</TableCell>
             <TableCell align="center">Amount</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
@@ -151,9 +163,7 @@ const PaidInvoices = () => {
               >
                 <TableCell align="left">{subscriber.name}</TableCell>
                 <TableCell align="center">{subscriber.room_number}</TableCell>
-                <TableCell align="center">
-                  {subscriber.payment_method}
-                </TableCell>
+                <TableCell align="center">{subscriber.deadline}</TableCell>
                 <TableCell align="center">{subscriber.total}</TableCell>
                 <TableCell align="right">
                   <IconButton>
@@ -164,6 +174,33 @@ const PaidInvoices = () => {
             ))}
         </TableBody>
       </StyledTable>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        {!openModify ? (
+          <InvoiceDetail
+            handleClose={handleClose}
+            handleOpenModify={handleOpenModify}
+            data={dataPopup}
+          />
+        ) : (
+          <InvoiceEdit
+            handleCloseModify={handleCloseModify}
+            data={dataPopup}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        )}
+      </Modal>
 
       <Modal
         open={open}
@@ -198,7 +235,7 @@ const PaidInvoices = () => {
         page={page}
         component="div"
         rowsPerPage={rowsPerPage}
-        count={paidData?.length}
+        count={unpaidData?.length}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}
@@ -209,4 +246,4 @@ const PaidInvoices = () => {
   );
 };
 
-export default PaidInvoices;
+export default UnpaidInvoice;
