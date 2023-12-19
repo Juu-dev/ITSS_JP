@@ -207,34 +207,6 @@ const UnpaidInvoice = () => {
         )}
       </Modal>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        {!openModify ? (
-          <InvoicePopup
-            handleClose={handleClose}
-            handleOpenModify={handleOpenModify}
-            data={dataPopup}
-          />
-        ) : (
-          <InvoiceModifyPopup
-            handleCloseModify={handleCloseModify}
-            data={dataPopup}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
-        )}
-      </Modal>
-
       <TablePagination
         sx={{ px: 2 }}
         page={page}
