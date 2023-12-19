@@ -9,6 +9,7 @@ import DetailTenant from "./DetailTenant";
 import DetailDetail from "./DetailDetail";
 import axiosInstance from "axios";
 import RoomHistory from "../../tenants/room-history/RoomHistory";
+import DetailInvoice from "./DetailInvoice";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -113,7 +114,7 @@ const Detail = () => {
           <DetailTenant roomData={data} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          Invoice
+          <DetailInvoice />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={3}>
           <RoomHistory />
