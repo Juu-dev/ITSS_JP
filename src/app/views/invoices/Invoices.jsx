@@ -93,6 +93,7 @@ const ImgaeCustom = styled("img")(() => ({
 
 const Invoices = () => {
   const [viewUnpaid, setInvoice] = useState(false);
+
   const handleInvoices = () => {
     setInvoice(!viewUnpaid);
   };
@@ -133,7 +134,8 @@ const Invoices = () => {
               <StyledButton
                 variant="contained"
                 color="primary"
-                onClick={handleInvoices}>
+                onClick={handleInvoices}
+              >
                 View unpaid invoices
               </StyledButton>
             )}
@@ -141,7 +143,8 @@ const Invoices = () => {
               <StyledButton
                 variant="contained"
                 color="primary"
-                onClick={handleInvoices}>
+                onClick={handleInvoices}
+              >
                 View paid invoices
               </StyledButton>
             )}
