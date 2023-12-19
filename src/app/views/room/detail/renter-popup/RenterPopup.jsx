@@ -12,12 +12,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import TableCustom from "./TableCustom";
-import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-
-const TextField = styled(TextValidator)(() => ({
-  width: "100%",
-  marginBottom: "16px",
-}));
+import axiosInstance from "axios";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -82,12 +77,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const RoomModifyPopup = ({
-  handleCloseModify,
-  handleChange,
-  handleSubmit,
-  data,
-}) => {
+const RenterPopup = ({ handleClose, handleOpenModify, data }) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -115,12 +105,12 @@ const RoomModifyPopup = ({
                     top: "-15px",
                     left: "-15px",
                   }}
-                  onClick={handleCloseModify}
+                  onClick={handleClose}
                 >
                   close
                 </Icon>
-                <Title>{data?.name}</Title>
-                {/* <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
+                <Title> {data.name || "Name Room"}</Title>
+                <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
                   <Icon
                     sx={{
                       color: textColor,
@@ -131,114 +121,48 @@ const RoomModifyPopup = ({
                   >
                     delete
                   </Icon>
-                  <Icon sx={{ color: textColor, cursor: "pointer" }}>edit</Icon>
-                </BoxCustomButton> */}
-                <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
-                  <StyledButton
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginBottom: "20px" }}
-                    onClick={handleSubmit}
+                  <Icon
+                    sx={{ color: textColor, cursor: "pointer" }}
+                    onClick={handleOpenModify}
                   >
-                    Submit
-                  </StyledButton>
+                    edit
+                  </Icon>
                 </BoxCustomButton>
               </BoxCustom>
               <TitleCard>Personal Information</TitleCard>
-              <ValidatorForm onError={() => null}>
-                <Card
-                  sx={{
-                    px: 3,
-                    py: 2,
-                    mb: 3,
-                    textAlign: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <TextField
-                    type="text"
-                    name="gender"
-                    id="standard-basic"
-                    value={data?.gender || ""}
-                    onChange={(e) => handleChange(e)}
-                    errorMessages={["this field is required"]}
-                    label="Gender"
-                    validators={["required"]}
-                  />
-                  <TextField
-                    type="text"
-                    name="tel"
-                    id="standard-basic"
-                    value={data?.tel || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Telephone"
-                    validators={["required"]}
-                  />
-                  <TextField
-                    type="text"
-                    name="id_number"
-                    id="standard-basic"
-                    value={data?.id_number || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Identification number"
-                    validators={["required"]}
-                  />
-                  <TextField
-                    type="text"
-                    name="email"
-                    id="standard-basic"
-                    value={data?.email || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Email"
-                    validators={["required"]}
-                  />
-                </Card>
+              <Card
+                sx={{
+                  px: 3,
+                  py: 2,
+                  mb: 3,
+                  textAlign: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Content>Gender: {data?.gender || "Fale"}</Content>
+                <Content>Tel: {data?.tel || "123456789"}</Content>
+                <Content>
+                  Identification number: {data.id_number || "3030300303"}
+                </Content>
+                <Content>Email: {data.email || "anhdeptrai@gmail.com"}</Content>
+              </Card>
 
-                <TitleCard>Room Information</TitleCard>
-                <Card
-                  sx={{
-                    px: 3,
-                    py: 2,
-                    mb: 3,
-                    textAlign: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <TextField
-                    type="text"
-                    name="room_number"
-                    id="standard-basic"
-                    value={data?.room_number || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Room number"
-                    validators={["required"]}
-                  />
-                  <TextField
-                    type="text"
-                    name="apartment_name"
-                    id="standard-basic"
-                    value={data?.apartment_name || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Apartment name"
-                    validators={["required"]}
-                  />
-                  <TextField
-                    type="text"
-                    name="room_host"
-                    id="standard-basic"
-                    value={data?.room_host || ""}
-                    onChange={handleChange}
-                    errorMessages={["this field is required"]}
-                    label="Room host"
-                    validators={["required"]}
-                  />
-                </Card>
-              </ValidatorForm>
+              <TitleCard>Room Information</TitleCard>
+              <Card
+                sx={{
+                  px: 3,
+                  py: 2,
+                  mb: 3,
+                  textAlign: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Content>Room number: {data.room_number || "T102"}</Content>
+                <Content>
+                  Apartment name: {data.apartment_name || "CC01"}
+                </Content>
+                <Content>Room host: {data.room_host || "Nguyen Van A"}</Content>
+              </Card>
             </Card>
           </Grid>
         </Grid>
@@ -249,7 +173,7 @@ const RoomModifyPopup = ({
   );
 };
 
-export const DeletePopup = ({ showPopup }) => {
+const DeletePopup = ({ showPopup }) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -312,4 +236,4 @@ export const DeletePopup = ({ showPopup }) => {
   );
 };
 
-export default RoomModifyPopup;
+export default RenterPopup;

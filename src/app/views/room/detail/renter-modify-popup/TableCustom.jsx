@@ -32,36 +32,23 @@ const TableCustom = () => {
   const [data, setData] = useState([]);
   const { id } = useParams();
 
-  const parseData = (data) => {
-    let result = [];
-    for (let i = 0; i < data.length; i++) {
-      result.push({
-        id: data[i].id,
-        apartment_id: data[i].apartment_id,
-        room_number: data[i].room_number,
-        rent_status: data[i].rent_status,
-        room_type: data[i].room_type,
-        additional_info: data[i].additional_info,
-      });
-    }
-    return result;
-  };
-
   useEffect(() => {
     async function fetchData() {
       const res = await axiosInstance.get(
-        `http://localhost:8000/api/rooms/${id}`
+        `http://localhost:8000/api/apartments/${id}`
       );
       let data = res.data;
       if (res.status === 200) {
-        const res1 = await axiosInstance.get(`http://localhost:8000/api/rooms`);
+        const res1 = await axiosInstance.get(
+          `http://localhost:8000/api/apartments`
+        );
         for (let apartment of res1.data) {
           if (apartment.id === data[0].apartment_id) {
             data[0].apartment_name = apartment.name;
           }
         }
+        console.log(data);
         setData(data);
-        console.log("data: ", data[0].tenants);
       }
     }
     fetchData();
@@ -82,22 +69,26 @@ const TableCustom = () => {
         <TableHead>
           <TableRow>
             <TableCell align="left">Renter Name</TableCell>
-            <TableCell align="center">Tel</TableCell>
-            <TableCell align="center">Start</TableCell>
-            <TableCell align="center">Gender</TableCell>
-            <TableCell align="right">Contact</TableCell>
+            <TableCell align="center">Room Number</TableCell>
+            <TableCell align="center">Rental status</TableCell>
+            <TableCell align="center">Room type</TableCell>
+            <TableCell align="right">Additional imformation</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data[0]?.tenants
+          {data
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((subscriber, index) => (
               <TableRow key={index}>
-                <TableCell align="left">{subscriber?.name}</TableCell>
-                <TableCell align="center">{subscriber?.phone_number}</TableCell>
-                <TableCell align="center">{subscriber?.created_at}</TableCell>
-                <TableCell align="center">{subscriber?.gender}</TableCell>
-                <TableCell align="center">{subscriber?.email}</TableCell>
+                <TableCell align="left">{subscriber.apartment_name}</TableCell>
+                <TableCell align="center">{subscriber.room_number}</TableCell>
+                <TableCell align="center">{subscriber.rent_status}</TableCell>
+                <TableCell align="center">
+                  {subscriber.room_type.type}
+                </TableCell>
+                <TableCell align="center">
+                  {subscriber.additional_info}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

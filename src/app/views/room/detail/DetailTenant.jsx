@@ -12,6 +12,11 @@ import { topBarHeight } from "app/utils/constant";
 import TenantCard from "./TenantCard";
 import AddNewTenant from "./AddNewTenant";
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Modal from "@mui/material/Modal";
+import axiosInstance from "axios";
+import RenterPopup from "./renter-popup/RenterPopup";
+import RoomModifyPopup from "./renter-modify-popup/RenterModifyPopup";
 
 const SearchContainer = styled("div")(({ theme }) => ({
   zIndex: 9,
@@ -67,6 +72,78 @@ export default function DetailTenant({ roomData }) {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
+  const [idPopup, setIdPopup] = useState(null);
+  const [openModify, setOpenModify] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [dataPopup, setDataPopup] = useState({
+    name: "",
+    gender: "",
+    tel: "",
+    id_number: "",
+    email: "",
+    room_number: "",
+    apartment_name: "",
+    room_host: "",
+  });
+
+  const handleChange = (event) => {
+    const dataExp = { ...dataPopup, [event.target.name]: event.target.value };
+    setDataPopup(dataExp);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const dataPatch = {
+      name: dataPopup.name,
+      phone_number: dataPopup.tel,
+      citizen_number: dataPopup.id_number,
+      gender: dataPopup.gender,
+      email: dataPopup.email,
+    };
+
+    // patch data
+    const patchData = async () => {
+      await axiosInstance
+        .patch(`http://127.0.0.1:8000/api/tenants/${idPopup}`, dataPatch)
+        .then((res) => {
+          handleClose();
+        });
+    };
+    patchData();
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleOpenModify = () => setOpenModify(true);
+  const handleCloseModify = () => setOpenModify(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      await axiosInstance
+        .get(`http://127.0.0.1:8000/api/tenants/${idPopup}`)
+        .then((res) => {
+          const dataSource = res?.data[0];
+          const dataExp = {
+            name: dataSource?.name,
+            gender: dataSource?.gender,
+            tel: dataSource?.phone_number,
+            id_number: dataSource?.citizen_number,
+            email: dataSource?.email,
+            room_number: dataSource?.rooms[0]?.room_number,
+            apartment_name: dataSource?.rooms[0]?.apartment?.name,
+            room_host: dataSource?.rooms[0]?.pivot?.room_host,
+          };
+          setDataPopup(dataExp);
+        });
+    }
+    if (idPopup) {
+      fetchData();
+      console.log(dataPopup);
+    }
+  }, [idPopup]);
+
   return (
     <Fragment>
       <Grid container spacing={4} alignItems="flex-end">
@@ -97,9 +174,42 @@ export default function DetailTenant({ roomData }) {
         </Grid>
         {tenantDataReal?.map((tenant) => (
           <Grid item xs={6}>
-            <TenantCard key={tenant.id} data={tenant} />
+            <TenantCard
+              key={tenant.id}
+              data={tenant}
+              handleShowPopup={handleOpen}
+              setIdPopup={setIdPopup}
+            />
           </Grid>
         ))}
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          {openModify ? (
+            <RenterPopup
+              handleClose={handleClose}
+              handleOpenModify={handleOpenModify}
+              data={dataPopup}
+            />
+          ) : (
+            <RoomModifyPopup
+              handleCloseModify={handleClose}
+              data={dataPopup}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+          )}
+        </Modal>
       </Grid>
     </Fragment>
   );

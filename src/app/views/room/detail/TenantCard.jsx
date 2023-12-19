@@ -6,8 +6,9 @@ import { Grid, IconButton } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import DeleteWarning from "./DeleteWarning";
 
-export default function TenantCard({ data }) {
+export default function TenantCard({ data, handleShowPopup, setIdPopup }) {
   const tenantData = data;
+
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
@@ -46,7 +47,12 @@ export default function TenantCard({ data }) {
             </Grid>
           </Grid>
           <Grid item>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                setIdPopup(tenantData.id);
+                handleShowPopup();
+              }}
+            >
               <Icon>edit</Icon>
             </IconButton>
             <DeleteWarning data={tenantData} />

@@ -17,6 +17,7 @@ import Modal from "@mui/material/Modal";
 import axiosInstance from "axios";
 import RenterPopup from "./renter-popup/RenterPopup";
 import RoomModifyPopup from "./renter-modify-popup/RenterModifyPopup";
+import DeletePopup from "./delete-popup/DelPopup";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -31,6 +32,8 @@ const StyledTable = styled(Table)(() => ({
 const TenantsList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [showDel, setShowDel] = useState(false);
 
   const [idPopup, setIdPopup] = useState(null);
   const [openModify, setOpenModify] = useState(false);
@@ -90,6 +93,11 @@ const TenantsList = () => {
   const handleOpenModify = () => setOpenModify(true);
   const handleCloseModify = () => setOpenModify(false);
 
+  const handleHiddenDel = () => {
+    handleClose();
+    setShowDel(false);
+  };
+
   useEffect(() => {
     async function fetchData() {
       await axiosInstance
@@ -115,6 +123,12 @@ const TenantsList = () => {
     }
   }, [idPopup]);
 
+  const handleRemoveTenant = (e) => {
+    e.stopPropagation();
+    handleOpen();
+    setShowDel(true);
+  };
+
   return (
     <Box width="100%" overflow="auto">
       <StyledTable>
@@ -130,6 +144,7 @@ const TenantsList = () => {
         </TableHead>
         <TableBody>
           {data
+            ?.filter((item) => !item.deleted_at)
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((subscriber, index) => (
               <TableRow
@@ -150,7 +165,12 @@ const TenantsList = () => {
                 </TableCell>
                 <TableCell align="center">{subscriber.email}</TableCell>
                 <TableCell align="right">
-                  <IconButton>
+                  <IconButton
+                    onClick={(e) => {
+                      setIdPopup(subscriber.id);
+                      handleRemoveTenant(e);
+                    }}
+                  >
                     <Icon color="error">close</Icon>
                   </IconButton>
                 </TableCell>
@@ -170,7 +190,9 @@ const TenantsList = () => {
           width: "100%",
         }}
       >
-        {!openModify ? (
+        {showDel ? (
+          <DeletePopup handleHiddenDel={handleHiddenDel} id={idPopup} />
+        ) : !openModify ? (
           <RenterPopup
             handleClose={handleClose}
             handleOpenModify={handleOpenModify}
