@@ -94,6 +94,18 @@ const Room_1 = () => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
+  const [inputValue, setInputValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleChangeSearch = () => {
+    setSearchValue(inputValue);
+  };
+
+  const resetSearchValue = () => {
+    setSearchValue("");
+    setInputValue("");
+  };
+
   return (
     <Fragment>
       <Container className="invoices">
@@ -110,11 +122,23 @@ const Room_1 = () => {
 
           <BoxCustom>
             <SearchContainer>
-              <SearchInput type="text" placeholder="Search here..." autoFocus />
+              <SearchInput
+                type="text"
+                placeholder="Search here..."
+                autoFocus
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
               <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
-                <Icon sx={{ color: textColor }}>close</Icon>
+                <Icon sx={{ color: textColor }} onClick={resetSearchValue}>
+                  close
+                </Icon>
               </IconButton>
-              <StyledButton variant="contained" color="primary">
+              <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={handleChangeSearch}
+              >
                 Search
               </StyledButton>
             </SearchContainer>
@@ -122,7 +146,7 @@ const Room_1 = () => {
         </Grid>
 
         <SimpleCard title="Room">
-          <TableCustom />
+          <TableCustom searchValue={searchValue} />
         </SimpleCard>
       </Container>
     </Fragment>

@@ -26,9 +26,11 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const TableCustom = () => {
+const TableCustom = ({ searchValue }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [originData, setOriginData] = useState([]);
 
   const [data, setData] = useState([]);
   const { id } = useParams();
@@ -50,10 +52,39 @@ const TableCustom = () => {
         }
         console.log(data);
         setData(data);
+        setOriginData(data);
       }
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setData(originData);
+    const dataNew = data?.filter((subscriber) => {
+      if (searchValue == "") return true;
+      if (
+        subscriber?.apartment_name
+          ?.toLowerCase()
+          ?.includes(searchValue?.toLowerCase())
+      )
+        return true;
+      if (
+        subscriber?.rent_status
+          ?.toLowerCase()
+          ?.includes(searchValue?.toLowerCase())
+      )
+        return true;
+
+      if (
+        subscriber?.additional_info
+          ?.toLowerCase()
+          ?.includes(searchValue?.toLowerCase())
+      )
+        return true;
+    });
+
+    setData(dataNew);
+  }, [searchValue]);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);

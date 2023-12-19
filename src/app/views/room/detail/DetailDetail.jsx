@@ -34,7 +34,7 @@ export default function DetailDetail({ roomData }) {
           <Typography variant="subtitle1" component="p">
             <strong>Media</strong>
           </Typography>
-          <ImageList cols={data?.room_medias.length} rowHeight={164}>
+          <ImageList cols={data?.room_medias.length} rowHeight={500}>
             {data?.room_medias.map((item) => (
               <ImageListItem key={item.id}>
                 <img

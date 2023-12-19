@@ -13,6 +13,7 @@ import { Breadcrumb } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import { Link } from "react-router-dom";
 import { useApiData } from "./useApiData";
+import { useEffect, useState } from "react";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -87,6 +88,31 @@ const Apartments = () => {
 
   const { data } = useApiData();
 
+  const [dataOrigin, setDataOrigin] = useState();
+
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  useEffect(() => {
+    setDataOrigin(data);
+    console.log(dataOrigin);
+    if (inputValue != "") {
+      const dataNew = data?.filter((item) => {
+        if (
+          item?.name?.toLowerCase()?.includes(inputValue?.toLowerCase()) ||
+          item?.address?.toLowerCase()?.includes(inputValue?.toLowerCase())
+        )
+          return true;
+      });
+
+      setDataOrigin(dataNew);
+    }
+    console.log(dataOrigin);
+  }, [inputValue, data]);
+
   return (
     <Fragment>
       <Container className="apartments">
@@ -105,7 +131,13 @@ const Apartments = () => {
 
           <BoxCustom>
             <SearchContainer>
-              <SearchInput type="text" placeholder="Search here..." autoFocus />
+              <SearchInput
+                type="text"
+                placeholder="Search here..."
+                autoFocus
+                value={inputValue}
+                onChange={(e) => handleChange(e)}
+              />
               <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
                 <Icon sx={{ color: textColor }}>close</Icon>
               </IconButton>
@@ -118,7 +150,7 @@ const Apartments = () => {
             </StyledButton>
           </BoxCustom>
 
-          {data?.map((item, index) => (
+          {dataOrigin?.map((item, index) => (
             <Grid item lg={4} md={4} sm={12} xs={12} key={index}>
               <Link to={`/apartments/${index + 1}/rooms`}>
                 <Card sx={{ px: 3, py: 2, mb: 3 }}>
