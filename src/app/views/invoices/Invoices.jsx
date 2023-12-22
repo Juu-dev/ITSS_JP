@@ -14,6 +14,10 @@ import { topBarHeight } from "app/utils/constant";
 import PaidInvoices from "./PaidInvoices";
 import UnpaidInvoices from "./UnpaidInvoices";
 import React, { useState } from "react";
+import axiosInstance from "axios";
+import Modal from "@mui/material/Modal";
+import InvoiceDetail from "./popup/InvoiceDetail";
+import InvoiceEdit from "./popup/InvoiceEdit";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -47,7 +51,8 @@ const BoxCustom = styled(Box)(() => ({
 
 const SearchContainer = styled("div")(({ theme }) => ({
   zIndex: 9,
-  width: "60%",
+  marginLeft: "17%",
+  width: "100%",
   display: "flex",
   alignItems: "center",
   height: topBarHeight,
@@ -91,8 +96,84 @@ const ImgaeCustom = styled("img")(() => ({
 //   }
 // };
 
+const BoxCustomButton = styled(Box)(() => ({
+  display: "flex",
+  alignItems: "flex-end",
+  justifyContent: "flex-end",
+  cursor: "pointer",
+  width: "100%",
+  height: "100%",
+}));
+
 const Invoices = () => {
   const [viewUnpaid, setInvoice] = useState(false);
+
+  const [openModify, setOpenModify] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [dataPopup, setDataPopup] = useState({
+    id: "",
+    name: "",
+    room: "",
+    apartment_name: "",
+    tel: "",
+    email: "",
+    create_at: "",
+    deadline: "",
+    water: "",
+    service: "",
+    rent: "",
+    electricity: "",
+    total: "",
+    pay_at: "",
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const total =
+      parseInt(dataPopup?.water) +
+      parseInt(dataPopup?.service) +
+      parseInt(dataPopup?.rent) +
+      parseInt(dataPopup?.electricity);
+
+    const dataPatch = {
+      room_id: dataPopup?.room_id,
+      deadline: dataPopup?.deadline,
+      pay_at: null,
+      water: dataPopup?.water,
+      service: dataPopup?.service,
+      rent: dataPopup?.rent,
+      total: total,
+      payment_method: "MasterCard",
+    };
+
+    console.log("check", dataPatch);
+
+    // patch data
+    const patchData = async () => {
+      await axiosInstance
+        .post(`http://127.0.0.1:8000/api/payments`, dataPatch)
+        .then((res) => {
+          handleClose();
+        });
+    };
+    patchData();
+    handleCloseModify();
+  };
+
+  const handleChange = (event) => {
+    const dataExp = { ...dataPopup, [event.target.name]: event.target.value };
+    setDataPopup(dataExp);
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleOpenModify = () => setOpenModify(true);
+  const handleCloseModify = () => {
+    handleClose();
+    setOpenModify(false);
+  };
 
   const handleInvoices = () => {
     setInvoice(!viewUnpaid);
@@ -101,6 +182,10 @@ const Invoices = () => {
   const textColor = palette.text.primary;
 
   const data = [1, 2, 3, 4, 5];
+
+  const handleCreateInvoice = () => {
+    handleOpen();
+  };
 
   return (
     <Fragment>
@@ -118,17 +203,57 @@ const Invoices = () => {
             </Card>
           </Grid>
 
-          <BoxCustom>
-            <SearchContainer>
-              <SearchInput type="text" placeholder="Search here..." autoFocus />
-              <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
-                <Icon sx={{ color: textColor }}>close</Icon>
-              </IconButton>
-              <StyledButton variant="contained" color="primary">
-                Search
+          <Grid item lg={10} md={10} sm={10} xs={10}>
+            <BoxCustom>
+              <SearchContainer>
+                <SearchInput
+                  type="text"
+                  placeholder="Search here..."
+                  autoFocus
+                />
+                <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
+                  <Icon sx={{ color: textColor }}>close</Icon>
+                </IconButton>
+                <StyledButton variant="contained" color="primary">
+                  Search
+                </StyledButton>
+              </SearchContainer>
+            </BoxCustom>
+          </Grid>
+
+          <Grid item lg={2} md={2} sm={2} xs={2}>
+            <BoxCustomButton>
+              <StyledButton
+                variant="contained"
+                color="primary"
+                sx={{ marginBottom: "20px" }}
+                onClick={handleCreateInvoice}
+              >
+                Add/Insert
               </StyledButton>
-            </SearchContainer>
-          </BoxCustom>
+            </BoxCustomButton>
+          </Grid>
+
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <InvoiceEdit
+              handleCloseModify={handleCloseModify}
+              data={dataPopup}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+          </Modal>
+
           <BoxCustom>
             {!viewUnpaid && (
               <StyledButton

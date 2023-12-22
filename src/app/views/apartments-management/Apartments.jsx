@@ -20,6 +20,8 @@ const Title = styled("div")(() => ({
   fontWeight: "500",
   marginRight: ".5rem",
   textTransform: "capitalize",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
 }));
 
 const SubTitle = styled("div")(({ theme }) => ({
@@ -77,7 +79,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const ImgaeCustom = styled("img")(() => ({
   width: "100%",
-  height: "100%",
+  height: "300px",
   objectFit: "cover",
   objectPosition: "center",
 }));
@@ -158,7 +160,7 @@ const Apartments = () => {
                   <SubTitle>Location: {item?.address}</SubTitle>
                   <SubTitle>Num of rooms: {item?.id}</SubTitle>
                   <ImgaeCustom
-                    src="/assets/images/anh-phong-ngu.jpg"
+                    src={item?.media_url || "/assets/images/anh-phong-ngu.jpg"}
                     alt="Anh phong ngu"
                   />
                 </Card>

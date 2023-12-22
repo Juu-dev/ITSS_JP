@@ -121,20 +121,21 @@ const InvoiceEdit = ({
                     top: "-15px",
                     left: "-15px",
                   }}
-                  onClick={handleCloseModify}>
+                  onClick={handleCloseModify}
+                >
                   close
                 </Icon>
                 <Title>
-                  {" "}
-                  {data?.name || "Name Room"} {data?.room || "1234"}{" "}
-                  {data?.apartment_name || "ABCD"}
+                  {data?.name || "Name Room"} {data?.room || ""}
+                  {data?.apartment_name || "aprtment name"}
                 </Title>{" "}
                 <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
                   <StyledButton
                     variant="contained"
                     color="primary"
                     sx={{ marginBottom: "20px" }}
-                    onClick={handleSubmit}>
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </StyledButton>
                 </BoxCustomButton>
@@ -166,7 +167,8 @@ const InvoiceEdit = ({
                     mb: 3,
                     textAlign: "center",
                     marginTop: "20px",
-                  }}>
+                  }}
+                >
                   {!paidStatus ? (
                     <FormControlLabel
                       control={
@@ -247,7 +249,7 @@ const InvoiceEdit = ({
                       {parseInt(data?.rent) +
                         parseInt(data?.water) +
                         parseInt(data?.service) +
-                        parseInt(data?.electricity) || "1000"}
+                        parseInt(data?.electricity) || "0"}
                     </strong>
                   </Content>
                 </Card>
@@ -280,7 +282,8 @@ const DeletePopup = ({ showPopup }) => {
                 position: "relative",
                 height: "100%",
                 width: "20rem",
-              }}>
+              }}
+            >
               <TitleWaning>Do you want to delete this ternant</TitleWaning>
               <Icon
                 sx={{
@@ -290,7 +293,8 @@ const DeletePopup = ({ showPopup }) => {
                   top: "10px",
                   right: "10px",
                 }}
-                onClick={() => showPopup(false)}>
+                onClick={() => showPopup(false)}
+              >
                 close
               </Icon>
               <Grid
@@ -299,17 +303,20 @@ const DeletePopup = ({ showPopup }) => {
                 md={12}
                 sm={12}
                 xs={12}
-                sx={{ marginTop: "20px" }}>
+                sx={{ marginTop: "20px" }}
+              >
                 <StyledButton
                   variant="contained"
                   color="primary"
-                  onClick={() => showPopup(false)}>
+                  onClick={() => showPopup(false)}
+                >
                   YES
                 </StyledButton>
                 <StyledButton
                   variant="contained"
                   color="error"
-                  onClick={() => showPopup(false)}>
+                  onClick={() => showPopup(false)}
+                >
                   NO
                 </StyledButton>
               </Grid>
