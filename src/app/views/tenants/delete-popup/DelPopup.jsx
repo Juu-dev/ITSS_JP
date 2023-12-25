@@ -88,7 +88,7 @@ const DeletePopup = ({ handleHiddenDel, id }) => {
     // patch data
     const deleteData = async () => {
       await axiosInstance
-        .delete(`http://127.0.0.1:8000/api/tenants/${id}`)
+        .delete(`http://134.209.101.17:8000/api/tenants/${id}`)
         .then((res) => {
           handleHiddenDel();
           window.location.reload();

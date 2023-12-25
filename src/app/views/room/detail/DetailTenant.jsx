@@ -105,7 +105,7 @@ export default function DetailTenant({ roomData }) {
     // patch data
     const patchData = async () => {
       await axiosInstance
-        .patch(`http://127.0.0.1:8000/api/tenants/${idPopup}`, dataPatch)
+        .patch(`http://134.209.101.17:8000/api/tenants/${idPopup}`, dataPatch)
         .then((res) => {
           handleClose();
         });
@@ -122,7 +122,7 @@ export default function DetailTenant({ roomData }) {
   useEffect(() => {
     async function fetchData() {
       await axiosInstance
-        .get(`http://127.0.0.1:8000/api/tenants/${idPopup}`)
+        .get(`http://134.209.101.17:8000/api/tenants/${idPopup}`)
         .then((res) => {
           const dataSource = res?.data[0];
           const dataExp = {

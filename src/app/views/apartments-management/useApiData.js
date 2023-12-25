@@ -8,7 +8,7 @@ export const useApiData = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/apartments"
+          "http://134.209.101.17:8000/api/apartments"
         );
         setData(response);
       } catch (error) {

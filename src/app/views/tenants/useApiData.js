@@ -7,7 +7,9 @@ export const useApiData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/tenants");
+        const response = await axios.get(
+          "http://134.209.101.17:8000/api/tenants"
+        );
         const data = response.data;
         setData(data);
       } catch (error) {

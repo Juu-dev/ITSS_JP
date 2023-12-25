@@ -152,7 +152,7 @@ const Invoices = () => {
     // patch data
     const patchData = async () => {
       await axiosInstance
-        .post(`http://127.0.0.1:8000/api/payments`, dataPatch)
+        .post(`http://134.209.101.17:8000/api/payments`, dataPatch)
         .then((res) => {
           handleClose();
         });

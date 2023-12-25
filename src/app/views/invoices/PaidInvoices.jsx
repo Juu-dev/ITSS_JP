@@ -91,7 +91,7 @@ const UnpaidInvoice = () => {
     // patch data
     const patchData = async () => {
       await axiosInstance
-        .patch(`http://127.0.0.1:8000/api/payments/${idPopup}`, dataPatch)
+        .patch(`http://134.209.101.17:8000/api/payments/${idPopup}`, dataPatch)
         .then((res) => {
           handleClose();
         });
@@ -109,7 +109,7 @@ const UnpaidInvoice = () => {
   useEffect(() => {
     async function fetchData() {
       await axiosInstance
-        .get(`http://127.0.0.1:8000/api/payments/${idPopup}`)
+        .get(`http://134.209.101.17:8000/api/payments/${idPopup}`)
         .then((res) => {
           const dataSource = res?.data[0];
           const dataExp = {
