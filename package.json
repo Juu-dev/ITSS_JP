@@ -1,6 +1,7 @@
 {
   "name": "matx-react",
   "version": "3.0.0",
+  "homepage": "https://moon.github.io/demo-itss-deploy-github-pages/",
   "private": true,
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.2",
@@ -45,7 +46,9 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ghp": "react-scripts build && gh-pages -d build"
+    "ghp": "react-scripts build && gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
