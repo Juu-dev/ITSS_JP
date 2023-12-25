@@ -1,27 +1,27 @@
-import { Box, Button, styled } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Button, styled } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const FlexBox = styled(Box)(() => ({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
 }));
 
 const JustifyBox = styled(FlexBox)(() => ({
   maxWidth: 320,
-  flexDirection: 'column',
-  justifyContent: 'center',
+  flexDirection: "column",
+  justifyContent: "center",
 }));
 
-const IMG = styled('img')(() => ({
-  width: '100%',
-  marginBottom: '32px',
+const IMG = styled("img")(() => ({
+  width: "100%",
+  marginBottom: "32px",
 }));
 
 const NotFoundRoot = styled(FlexBox)(() => ({
-  width: '100%',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100vh !important',
+  width: "100%",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100vh !important",
 }));
 
 const NotFound = () => {
@@ -35,10 +35,10 @@ const NotFound = () => {
         <Button
           color="primary"
           variant="contained"
-          sx={{ textTransform: 'capitalize' }}
+          sx={{ textTransform: "capitalize" }}
           onClick={() => navigate(-1)}
         >
-          Go Back
+          Go Back - Not Found
         </Button>
       </JustifyBox>
     </NotFoundRoot>
