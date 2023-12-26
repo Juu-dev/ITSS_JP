@@ -61,6 +61,17 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
+const ContainerDelete = styled("div")(({ theme }) => ({
+  margin: "30px",
+  position: "absolute",
+  border: "1px solid #000",
+  [theme.breakpoints.down("sm")]: { margin: "16px" },
+  "& .breadcrumb": {
+    marginBottom: "30px",
+    [theme.breakpoints.down("sm")]: { marginBottom: "16px" },
+  },
+}));
+
 const BoxCustom = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
@@ -270,7 +281,7 @@ const DeletePopup = ({ showPopup }) => {
 
   return (
     <Fragment>
-      <Container>
+      <ContainerDelete>
         <Grid container spacing={5}>
           <Grid item lg={4} md={4} sm={4} xs={4}>
             <Card
@@ -284,7 +295,7 @@ const DeletePopup = ({ showPopup }) => {
                 width: "20rem",
               }}
             >
-              <TitleWaning>Do you want to delete this ternant</TitleWaning>
+              <TitleWaning>Do you want to delete this invoice</TitleWaning>
               <Icon
                 sx={{
                   color: textColor,
@@ -323,7 +334,7 @@ const DeletePopup = ({ showPopup }) => {
             </Card>
           </Grid>
         </Grid>
-      </Container>
+      </ContainerDelete>
     </Fragment>
   );
 };

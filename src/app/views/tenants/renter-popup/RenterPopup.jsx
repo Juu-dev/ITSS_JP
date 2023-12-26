@@ -13,6 +13,7 @@ import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import TableCustom from "./TableCustom";
 import axiosInstance from "axios";
+import Modal from "@mui/material/Modal";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -77,14 +78,24 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const RenterPopup = ({ handleClose, handleOpenModify, data }) => {
+const RenterPopup = ({
+  handleClose,
+  handleOpenModify,
+  data,
+  handleRemoveTenant,
+}) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
+  const [openDelete, setOpenDelete] = useState(true);
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const handleDeleteClick = () => {
     setShowDeletePopup(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   return (
@@ -168,18 +179,36 @@ const RenterPopup = ({ handleClose, handleOpenModify, data }) => {
         </Grid>
       </Container>
 
-      {showDeletePopup && <DeletePopup showPopup={setShowDeletePopup} />}
+      {showDeletePopup && (
+        <Modal
+          open={openDelete}
+          onClose={handleCloseDelete}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <DeletePopup
+            showPopup={setShowDeletePopup}
+            handleRemoveTenant={handleRemoveTenant}
+          />
+        </Modal>
+      )}
     </Fragment>
   );
 };
 
-const DeletePopup = ({ showPopup }) => {
+const DeletePopup = ({ showPopup, handleRemoveTenant }) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
   return (
     <Fragment>
-      <Container>
+      <Container style={{ position: "absolute" }}>
         <Grid container spacing={5}>
           <Grid item lg={4} md={4} sm={4} xs={4}>
             <Card
@@ -190,6 +219,7 @@ const DeletePopup = ({ showPopup }) => {
                 textAlign: "center",
                 position: "relative",
                 height: "100%",
+                width: "20rem",
               }}
             >
               <TitleWaning>Do you want to delete this ternant</TitleWaning>
@@ -216,7 +246,7 @@ const DeletePopup = ({ showPopup }) => {
                 <StyledButton
                   variant="contained"
                   color="primary"
-                  onClick={() => showPopup(false)}
+                  onClick={() => handleRemoveTenant()}
                 >
                   YES
                 </StyledButton>

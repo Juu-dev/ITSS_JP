@@ -197,7 +197,7 @@ const DeletePopup = ({ showPopup }) => {
                 height: "100%",
               }}
             >
-              <TitleWaning>Do you want to delete this ternant</TitleWaning>
+              <TitleWaning>Do you want to delete this invoice</TitleWaning>
               <Icon
                 sx={{
                   color: textColor,

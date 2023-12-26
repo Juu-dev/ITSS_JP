@@ -17,7 +17,6 @@ import Modal from "@mui/material/Modal";
 import axiosInstance from "axios";
 import RenterPopup from "./renter-popup/RenterPopup";
 import RoomModifyPopup from "./renter-modify-popup/RenterModifyPopup";
-import DeletePopup from "./delete-popup/DelPopup";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -32,8 +31,6 @@ const StyledTable = styled(Table)(() => ({
 const TenantsList = ({ searchValue }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const [showDel, setShowDel] = useState(false);
 
   const [idPopup, setIdPopup] = useState(null);
   const [openModify, setOpenModify] = useState(false);
@@ -89,14 +86,14 @@ const TenantsList = ({ searchValue }) => {
   };
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleOpenModify = () => setOpenModify(true);
-  const handleCloseModify = () => setOpenModify(false);
-
-  const handleHiddenDel = () => {
-    handleClose();
-    setShowDel(false);
+  const handleCloseModify = () => {
+    setOpen(false);
+    setOpenModify(false);
   };
 
   useEffect(() => {
@@ -124,10 +121,17 @@ const TenantsList = ({ searchValue }) => {
     }
   }, [idPopup]);
 
-  const handleRemoveTenant = (e) => {
-    e.stopPropagation();
-    handleOpen();
-    setShowDel(true);
+  const handleRemoveTenant = (e, id) => {
+    if (e) e.stopPropagation();
+    async function fetchData() {
+      await axiosInstance
+        .delete(`http://134.209.101.17:8000/api/tenants/${id}`)
+        .then((res) => {
+          console.log(res);
+          window.location.reload();
+        });
+    }
+    fetchData();
   };
 
   useEffect(() => {
@@ -193,7 +197,7 @@ const TenantsList = ({ searchValue }) => {
                   <IconButton
                     onClick={(e) => {
                       setIdPopup(subscriber.id);
-                      handleRemoveTenant(e);
+                      handleRemoveTenant(e, subscriber.id);
                     }}
                   >
                     <Icon color="error">close</Icon>
@@ -215,13 +219,12 @@ const TenantsList = ({ searchValue }) => {
           width: "100%",
         }}
       >
-        {showDel ? (
-          <DeletePopup handleHiddenDel={handleHiddenDel} id={idPopup} />
-        ) : !openModify ? (
+        {!openModify ? (
           <RenterPopup
             handleClose={handleClose}
             handleOpenModify={handleOpenModify}
             data={dataPopup}
+            handleRemoveTenant={() => handleRemoveTenant(null, idPopup)}
           />
         ) : (
           <RoomModifyPopup

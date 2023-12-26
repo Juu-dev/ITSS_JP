@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { set } from "lodash";
 import { Fragment, useEffect, useState } from "react";
+import Modal from "@mui/material/Modal";
 
 const Title = styled("div")(() => ({
   fontSize: "1.5rem",
@@ -80,6 +81,7 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
   const textColor = palette.text.primary;
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [openDelete, setOpenDelete] = useState(true);
 
   const [paidStatus, setPaidStatus] = useState(true);
   useEffect(() => {
@@ -91,6 +93,10 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
 
   const handleDeleteClick = () => {
     setShowDeletePopup(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   return (
@@ -106,7 +112,8 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                     position: "relative",
                     left: "-15px",
                   }}
-                  onClick={handleClose}>
+                  onClick={handleClose}
+                >
                   close
                 </Icon>
                 <Title>
@@ -121,12 +128,14 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                       marginRight: "10px",
                       cursor: "pointer",
                     }}
-                    onClick={handleDeleteClick}>
+                    onClick={handleDeleteClick}
+                  >
                     delete
                   </Icon>
                   <Icon
                     sx={{ color: textColor, cursor: "pointer" }}
-                    onClick={handleOpenModify}>
+                    onClick={handleOpenModify}
+                  >
                     edit
                   </Icon>
                 </BoxCustomButton>
@@ -136,7 +145,8 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                   px: 3,
                   py: 2,
                   marginTop: "20px",
-                }}>
+                }}
+              >
                 {paidStatus ? (
                   <FormControlLabel
                     control={
@@ -160,7 +170,8 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                   py: 2,
                   textAlign: "center",
                   marginTop: "20px",
-                }}>
+                }}
+              >
                 <Content>Room host: {data?.name || "Male"}</Content>
                 <Content>Room: {data?.room || "1234"}</Content>
                 <Content>
@@ -179,7 +190,8 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                   py: 2,
                   textAlign: "center",
                   marginTop: "20px",
-                }}>
+                }}
+              >
                 <Content>
                   Period statement from 2023/09/15 until 2023/10/15
                 </Content>
@@ -196,7 +208,8 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
                   py: 2,
                   textAlign: "center",
                   marginTop: "20px",
-                }}>
+                }}
+              >
                 <Content>Water: {data?.water || "1000"}</Content>
                 <Content>Service: {data?.service || "1000"}</Content>
                 <Content>Rent: {data?.rent || "1000"}</Content>
@@ -208,7 +221,22 @@ const InvoiceDetail = ({ handleClose, handleOpenModify, data }) => {
         </Grid>
       </Container>
 
-      {showDeletePopup && <DeletePopup showPopup={setShowDeletePopup} />}
+      {showDeletePopup && (
+        <Modal
+          open={openDelete}
+          onClose={handleCloseDelete}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <DeletePopup showPopup={setShowDeletePopup} />
+        </Modal>
+      )}
     </Fragment>
   );
 };
@@ -219,7 +247,7 @@ const DeletePopup = ({ showPopup }) => {
 
   return (
     <Fragment>
-      <Container>
+      <Container style={{ position: "absolute" }}>
         <Grid container spacing={5}>
           <Grid item lg={4} md={4} sm={4} xs={4}>
             <Card
@@ -231,8 +259,9 @@ const DeletePopup = ({ showPopup }) => {
                 position: "relative",
                 height: "100%",
                 width: "20rem",
-              }}>
-              <TitleWaning>Do you want to delete this ternant</TitleWaning>
+              }}
+            >
+              <TitleWaning>Do you want to delete this invoice</TitleWaning>
               <Icon
                 sx={{
                   color: textColor,
@@ -241,7 +270,8 @@ const DeletePopup = ({ showPopup }) => {
                   top: "10px",
                   right: "10px",
                 }}
-                onClick={() => showPopup(false)}>
+                onClick={() => showPopup(false)}
+              >
                 close
               </Icon>
               <Grid
@@ -250,17 +280,20 @@ const DeletePopup = ({ showPopup }) => {
                 md={12}
                 sm={12}
                 xs={12}
-                sx={{ marginTop: "20px" }}>
+                sx={{ marginTop: "20px" }}
+              >
                 <StyledButton
                   variant="contained"
                   color="primary"
-                  onClick={() => window.location.reload()}>
+                  onClick={() => window.location.reload()}
+                >
                   YES
                 </StyledButton>
                 <StyledButton
                   variant="contained"
                   color="error"
-                  onClick={() => showPopup(false)}>
+                  onClick={() => showPopup(false)}
+                >
                   NO
                 </StyledButton>
               </Grid>
