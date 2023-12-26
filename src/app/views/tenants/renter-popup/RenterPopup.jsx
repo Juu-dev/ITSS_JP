@@ -172,7 +172,9 @@ const RenterPopup = ({
                 <Content>
                   Apartment name: {data.apartment_name || "CC01"}
                 </Content>
-                <Content>Room host: {data.room_host || "Nguyen Van A"}</Content>
+                <Content>
+                  Room host: {data.room_host ? "True" : "False"}
+                </Content>
               </Card>
             </Card>
           </Grid>
