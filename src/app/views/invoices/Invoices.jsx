@@ -8,7 +8,7 @@ import {
   Icon,
   Button,
 } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Breadcrumb, SimpleCard } from "app/components";
 import { topBarHeight } from "app/utils/constant";
 import PaidInvoices from "./PaidInvoices";
@@ -107,6 +107,7 @@ const BoxCustomButton = styled(Box)(() => ({
 
 const Invoices = () => {
   const [viewUnpaid, setInvoice] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const [openModify, setOpenModify] = useState(false);
   const [open, setOpen] = useState(false);
@@ -187,6 +188,10 @@ const Invoices = () => {
     handleOpen();
   };
 
+  const changeSearch = (event) => {
+    setSearchValue(event.target.value);
+  };
+
   return (
     <Fragment>
       <Container className="invoices">
@@ -210,6 +215,8 @@ const Invoices = () => {
                   type="text"
                   placeholder="Search here..."
                   autoFocus
+                  value={searchValue}
+                  onChange={changeSearch}
                 />
                 <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
                   <Icon sx={{ color: textColor }}>close</Icon>
@@ -277,12 +284,12 @@ const Invoices = () => {
         </Grid>
         {!viewUnpaid && (
           <SimpleCard title="Paid Invoices">
-            <PaidInvoices />
+            <PaidInvoices searchValue={searchValue} />
           </SimpleCard>
         )}
         {viewUnpaid && (
           <SimpleCard title="Unpaid Invoices">
-            <UnpaidInvoices />
+            <UnpaidInvoices searchValue={searchValue} />
           </SimpleCard>
         )}
       </Container>

@@ -27,11 +27,18 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const UnpaidInvoice = () => {
+const UnpaidInvoice = ({ searchValue }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { unpaidData, paidData } = useApiData();
+  const { data, loading, error } = useApiData();
+  const [unpaidData, setUnpaidData] = useState([]);
+
+  useEffect(() => {
+    const { paidData, unpaidData } = data;
+    setUnpaidData(unpaidData);
+  }, [data]);
+
   const [open, setOpen] = useState(false);
 
   const [idPopup, setIdPopup] = useState(null);
@@ -141,6 +148,19 @@ const UnpaidInvoice = () => {
     }
   }, [idPopup]);
 
+  // filter data.paidData with searchValue and then set to setPaidData
+  useEffect(() => {
+    const filteredData = data?.unpaidData?.filter((item) => {
+      return (
+        item?.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item?.room_number.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item?.deadline.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item?.total.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    });
+    setUnpaidData(filteredData);
+  }, [searchValue]);
+
   return (
     <Box width="100%" overflow="auto">
       <StyledTable>
@@ -153,30 +173,34 @@ const UnpaidInvoice = () => {
             <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {unpaidData
-            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            ?.map((subscriber, index) => (
-              <TableRow
-                key={index}
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  handleOpen();
-                  setIdPopup(subscriber.id);
-                }}
-              >
-                <TableCell align="left">{subscriber.name}</TableCell>
-                <TableCell align="center">{subscriber.room_number}</TableCell>
-                <TableCell align="center">{subscriber.deadline}</TableCell>
-                <TableCell align="center">{subscriber.total}</TableCell>
-                <TableCell align="right">
-                  <IconButton>
-                    <Icon color="error">close</Icon>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
+        {loading ? (
+          "loading..."
+        ) : (
+          <TableBody>
+            {unpaidData
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ?.map((subscriber, index) => (
+                <TableRow
+                  key={index}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    handleOpen();
+                    setIdPopup(subscriber.id);
+                  }}
+                >
+                  <TableCell align="left">{subscriber.name}</TableCell>
+                  <TableCell align="center">{subscriber.room_number}</TableCell>
+                  <TableCell align="center">{subscriber.deadline}</TableCell>
+                  <TableCell align="center">{subscriber.total}</TableCell>
+                  <TableCell align="right">
+                    <IconButton>
+                      <Icon color="error">close</Icon>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        )}
       </StyledTable>
       <Modal
         open={open}
