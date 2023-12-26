@@ -122,7 +122,7 @@ const TableCustom = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await axiosInstance
-        .get(`http://localhost:8000/api/payments`)
+        .get(`http://134.209.101.17:8000/api/payments`)
         .then((res) => {
           const data = res?.data?.filter((item) => item.room_id == id);
           setData(data);

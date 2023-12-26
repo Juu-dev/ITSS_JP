@@ -68,7 +68,7 @@ const Detail = () => {
     async function fetchData() {
       try {
         const res = await axiosInstance
-          .get(`http://localhost:8000/api/rooms/${room_id}`)
+          .get(`http://134.209.101.17:8000/api/rooms/${room_id}`)
           .then((res) => {
             setData(res.data);
           });

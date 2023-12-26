@@ -16,6 +16,7 @@ import axiosInstance from "axios";
 import Modal from "@mui/material/Modal";
 import InvoiceDetail from "./popup/InvoiceDetail";
 import InvoiceEdit from "./popup/InvoiceEdit";
+import Loading from "../../components/MatxLoading";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -157,87 +158,101 @@ const UnpaidInvoice = ({ searchValue }) => {
   }, [searchValue]);
 
   return (
-    <Box width="100%" overflow="auto">
-      <StyledTable>
-        <TableHead>
-          <TableRow>
-            <TableCell align="left">Apartment Name</TableCell>
-            <TableCell align="center">Room Num</TableCell>
-            <TableCell align="center">Deadline</TableCell>
-            <TableCell align="center">Amount</TableCell>
-            <TableCell align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        {loading ? (
-          "Loading..."
-        ) : (
-          <TableBody>
-            {paidData
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              ?.map((subscriber, index) => (
-                <TableRow
-                  key={index}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    handleOpen();
-                    setIdPopup(subscriber.id);
-                  }}
-                >
-                  <TableCell align="left">{subscriber.name}</TableCell>
-                  <TableCell align="center">{subscriber.room_number}</TableCell>
-                  <TableCell align="center">{subscriber.deadline}</TableCell>
-                  <TableCell align="center">{subscriber.total}</TableCell>
-                  <TableCell align="right">
-                    <IconButton>
-                      <Icon color="error">close</Icon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        )}
-      </StyledTable>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        {!openModify ? (
-          <InvoiceDetail
-            handleClose={handleClose}
-            handleOpenModify={handleOpenModify}
-            data={dataPopup}
-          />
-        ) : (
-          <InvoiceEdit
-            handleCloseModify={handleCloseModify}
-            data={dataPopup}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
-        )}
-      </Modal>
+    <>
+      {loading && (
+        <div
+          style={{
+            margin: "30px",
+            position: "absolute",
+            top: "40%",
+            left: "10%",
+          }}
+        >
+          <Loading />
+        </div>
+      )}
+      <Box width="100%" overflow="auto">
+        <StyledTable>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Apartment Name</TableCell>
+              <TableCell align="center">Room Num</TableCell>
+              <TableCell align="center">Deadline</TableCell>
+              <TableCell align="center">Amount</TableCell>
+              <TableCell align="right">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          {!loading && (
+            <TableBody>
+              {paidData
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                ?.map((subscriber, index) => (
+                  <TableRow
+                    key={index}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleOpen();
+                      setIdPopup(subscriber.id);
+                    }}
+                  >
+                    <TableCell align="left">{subscriber.name}</TableCell>
+                    <TableCell align="center">
+                      {subscriber.room_number}
+                    </TableCell>
+                    <TableCell align="center">{subscriber.deadline}</TableCell>
+                    <TableCell align="center">{subscriber.total}</TableCell>
+                    <TableCell align="right">
+                      <IconButton>
+                        <Icon color="error">close</Icon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          )}
+        </StyledTable>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          {!openModify ? (
+            <InvoiceDetail
+              handleClose={handleClose}
+              handleOpenModify={handleOpenModify}
+              data={dataPopup}
+            />
+          ) : (
+            <InvoiceEdit
+              handleCloseModify={handleCloseModify}
+              data={dataPopup}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+          )}
+        </Modal>
 
-      <TablePagination
-        sx={{ px: 2 }}
-        page={page}
-        component="div"
-        rowsPerPage={rowsPerPage}
-        count={paidData?.length}
-        onPageChange={handleChangePage}
-        rowsPerPageOptions={[5, 10, 25]}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        nextIconButtonProps={{ "aria-label": "Next Page" }}
-        backIconButtonProps={{ "aria-label": "Previous Page" }}
-      />
-    </Box>
+        <TablePagination
+          sx={{ px: 2 }}
+          page={page}
+          component="div"
+          rowsPerPage={rowsPerPage}
+          count={paidData?.length}
+          onPageChange={handleChangePage}
+          rowsPerPageOptions={[5, 10, 25]}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          nextIconButtonProps={{ "aria-label": "Next Page" }}
+          backIconButtonProps={{ "aria-label": "Previous Page" }}
+        />
+      </Box>
+    </>
   );
 };
 

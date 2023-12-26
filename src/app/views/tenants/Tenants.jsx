@@ -83,6 +83,7 @@ const ImgaeCustom = styled("img")(() => ({
 }));
 
 const Tenants = () => {
+  const [searchValue, setSearchValue] = useState("");
   const { palette } = useTheme();
   const textColor = palette.text.primary;
 
@@ -96,6 +97,10 @@ const Tenants = () => {
 
   const handleCloseAddInsertForm = () => {
     setAddInsertFormOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setSearchValue(e.target.value);
   };
 
   return (
@@ -116,7 +121,13 @@ const Tenants = () => {
 
           <BoxCustom>
             <SearchContainer>
-              <SearchInput type="text" placeholder="Search here..." autoFocus />
+              <SearchInput
+                type="text"
+                placeholder="Search here..."
+                autoFocus
+                value={searchValue}
+                onChange={handleChange}
+              />
               <IconButton sx={{ mx: 2, verticalAlign: "middle" }}>
                 <Icon sx={{ color: textColor }}>close</Icon>
               </IconButton>
@@ -136,7 +147,7 @@ const Tenants = () => {
           </BoxCustom>
         </Grid>
         <SimpleCard title="Tenants List">
-          <TenantsList />
+          <TenantsList searchValue={searchValue} />
         </SimpleCard>
         <ResidentPopup
           open={addInsertFormOpen}

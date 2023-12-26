@@ -29,7 +29,7 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const TenantsList = () => {
+const TenantsList = ({ searchValue }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -50,6 +50,7 @@ const TenantsList = () => {
   });
 
   const { data } = useApiData();
+  const [dataDisplay, setDataDisplay] = useState(data);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -129,6 +130,30 @@ const TenantsList = () => {
     setShowDel(true);
   };
 
+  useEffect(() => {
+    console.log("check: ", searchValue);
+    if (searchValue && searchValue !== "") {
+      const dataSearch = data;
+      const dataNew = dataSearch?.filter((item) => {
+        return (
+          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.phone_number.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.rooms[0].room_number
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          item.rooms[0].pivot.rent_type
+            .toLowerCase()
+            .includes(searchValue.toLowerCase())
+        );
+      });
+      console.log("check data: ", dataNew.length);
+      setDataDisplay(dataNew);
+    } else {
+      setDataDisplay(data);
+    }
+  }, [searchValue, data]);
+
   return (
     <Box width="100%" overflow="auto">
       <StyledTable>
@@ -143,7 +168,7 @@ const TenantsList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data
+          {dataDisplay
             ?.filter((item) => !item.deleted_at)
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((subscriber, index) => (
@@ -213,7 +238,7 @@ const TenantsList = () => {
         page={page}
         component="div"
         rowsPerPage={rowsPerPage}
-        count={data?.length}
+        count={dataDisplay?.length}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}

@@ -15,6 +15,7 @@ import axiosInstance from "axios";
 import { useParams } from "react-router-dom";
 import { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -38,12 +39,12 @@ const TableCustom = ({ searchValue }) => {
   useEffect(() => {
     async function fetchData() {
       const res = await axiosInstance.get(
-        `http://localhost:8000/api/apartments/${id}`
+        `http://134.209.101.17:8000/api/apartments/${id}`
       );
       let data = res.data;
       if (res.status === 200) {
         const res1 = await axiosInstance.get(
-          `http://localhost:8000/api/apartments`
+          `http://134.209.101.17:8000/api/apartments`
         );
         for (let apartment of res1.data) {
           if (apartment.id === data[0].apartment_id) {
@@ -95,6 +96,12 @@ const TableCustom = ({ searchValue }) => {
     setPage(0);
   };
 
+  const navigate = useNavigate();
+
+  const handleRedirect = (id) => {
+    navigate(`${id}`);
+  };
+
   return (
     <Box width="100%" overflow="auto">
       <StyledTable>
@@ -112,7 +119,11 @@ const TableCustom = ({ searchValue }) => {
           {data
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((subscriber, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                onClick={() => handleRedirect(subscriber?.id)}
+                style={{ cursor: "pointer" }}
+              >
                 <TableCell align="left">{subscriber.apartment_name}</TableCell>
                 <TableCell align="center">{subscriber.room_number}</TableCell>
                 <TableCell align="center">{subscriber.rent_status}</TableCell>

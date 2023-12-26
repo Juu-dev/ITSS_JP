@@ -50,11 +50,13 @@ const TableCustom = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await axiosInstance.get(
-        `http://localhost:8000/api/rooms/${id}`
+        `http://134.209.101.17:8000/api/rooms/${id}`
       );
       let data = res.data;
       if (res.status === 200) {
-        const res1 = await axiosInstance.get(`http://localhost:8000/api/rooms`);
+        const res1 = await axiosInstance.get(
+          `http://134.209.101.17:8000/api/rooms`
+        );
         for (let apartment of res1.data) {
           if (apartment.id === data[0].apartment_id) {
             data[0].apartment_name = apartment.name;

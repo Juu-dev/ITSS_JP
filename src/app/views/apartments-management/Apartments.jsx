@@ -22,11 +22,19 @@ const Title = styled("div")(() => ({
   textTransform: "capitalize",
   whiteSpace: "nowrap",
   overflow: "hidden",
+  width: "100%",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "inherit",
 }));
 
 const SubTitle = styled("div")(({ theme }) => ({
   fontSize: "0.875rem",
   color: theme.palette.text.secondary,
+  width: "100%",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "inherit",
 }));
 
 const Container = styled("div")(({ theme }) => ({
@@ -156,9 +164,14 @@ const Apartments = () => {
             <Grid item lg={4} md={4} sm={12} xs={12} key={index}>
               <Link to={`/apartments/${index + 1}/rooms`}>
                 <Card sx={{ px: 3, py: 2, mb: 3 }}>
-                  <Title>Name: {item?.name}</Title>
-                  <SubTitle>Location: {item?.address}</SubTitle>
-                  <SubTitle>Num of rooms: {item?.id}</SubTitle>
+                  <Title>{item?.name}</Title>
+                  <SubTitle>
+                    <b>Location: </b>
+                    {item?.address}
+                  </SubTitle>
+                  <SubTitle>
+                    <b>Num of rooms:</b> {item?.id}
+                  </SubTitle>
                   <ImgaeCustom
                     src={item?.media_url || "/assets/images/anh-phong-ngu.jpg"}
                     alt="Anh phong ngu"

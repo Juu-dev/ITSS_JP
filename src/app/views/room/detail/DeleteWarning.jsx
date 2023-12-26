@@ -31,7 +31,7 @@ export default function DeleteWarning(data) {
     try {
       const res = await axiosInstance
         .delete(
-          `http://localhost:8000/api/rooms/${params.room_id}/tenant=${id}`
+          `http://134.209.101.17:8000/api/rooms/${params.room_id}/tenant=${id}`
         )
         .then((res) => {
           console.log(res.data);
@@ -51,21 +51,24 @@ export default function DeleteWarning(data) {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={style}>
           <Typography
             id="modal-modal-title"
             variant="h6"
             component="h2"
             textAlign="center"
-            marginBottom={2}>
+            marginBottom={2}
+          >
             Do you want to delete this tenant {id}?
           </Typography>
           <Stack
             spacing={4}
             direction="row"
             alignItems="center"
-            justifyContent="center">
+            justifyContent="center"
+          >
             <Button variant="outlined" onClick={handleClose}>
               Cancel
             </Button>

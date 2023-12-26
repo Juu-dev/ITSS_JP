@@ -70,7 +70,7 @@ export default function AddNewTenant() {
     async function postData() {
       try {
         const response = await axiosInstance.post(
-          `http://localhost:8000/api/rooms/${params.room_id}/tenant`,
+          `http://134.209.101.17:8000/api/rooms/${params.room_id}/tenant`,
           data
         );
         setOpen(false);
