@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import axiosInstance from "axios";
 import Modal from "@mui/material/Modal";
 import InvoiceDetail from "./popup/InvoiceDetail";
-import InvoiceEdit from "./popup/InvoiceEdit";
+import InvoiceEdit from "./popup/InvoiceCreate";
 
 const Title = styled("div")(() => ({
   fontSize: "2rem",
@@ -112,20 +112,14 @@ const Invoices = () => {
   const [openModify, setOpenModify] = useState(false);
   const [open, setOpen] = useState(false);
   const [dataPopup, setDataPopup] = useState({
-    id: "",
-    name: "",
-    room: "",
-    apartment_name: "",
-    tel: "",
-    email: "",
-    create_at: "",
+    room_id: "",
     deadline: "",
     water: "",
     service: "",
     rent: "",
     electricity: "",
     total: "",
-    pay_at: "",
+    payment_method: "",
   });
 
   const handleSubmit = (event) => {
@@ -137,14 +131,25 @@ const Invoices = () => {
       parseInt(dataPopup?.rent) +
       parseInt(dataPopup?.electricity);
 
+    // convert to format :2024-10-09 16:30:00
+    const date = new Date(dataPopup?.deadline);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+
+    const deadline = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
     const dataPatch = {
       room_id: dataPopup?.room_id,
-      deadline: dataPopup?.deadline,
-      pay_at: null,
+      deadline: deadline,
       water: dataPopup?.water,
+      electricity: dataPopup?.electricity,
       service: dataPopup?.service,
       rent: dataPopup?.rent,
-      total: total,
+      total: total.toString(),
       payment_method: "MasterCard",
     };
 
@@ -155,6 +160,7 @@ const Invoices = () => {
       await axiosInstance
         .post(`http://134.209.101.17:8000/api/payments`, dataPatch)
         .then((res) => {
+          alert("Create invoice successfully");
           handleClose();
         });
     };
@@ -167,13 +173,21 @@ const Invoices = () => {
     setDataPopup(dataExp);
   };
 
+  const handleRoomID = (data) => {
+    const dataExp = { ...dataPopup, room_id: data };
+    setDataPopup(dataExp);
+  };
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpenModify(false);
+    setOpen(false);
+  };
 
   const handleOpenModify = () => setOpenModify(true);
   const handleCloseModify = () => {
-    handleClose();
     setOpenModify(false);
+    handleClose();
   };
 
   const handleInvoices = () => {
@@ -255,9 +269,10 @@ const Invoices = () => {
           >
             <InvoiceEdit
               handleCloseModify={handleCloseModify}
-              data={dataPopup}
+              dataPopup={dataPopup}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
+              handleRoomID={handleRoomID}
             />
           </Modal>
 

@@ -170,7 +170,7 @@ const Apartments = () => {
                     {item?.address}
                   </SubTitle>
                   <SubTitle>
-                    <b>Num of rooms:</b> {item?.id}
+                    <b>Num of rooms:</b> {item?.rooms?.length}
                   </SubTitle>
                   <ImgaeCustom
                     src={item?.media_url || "/assets/images/anh-phong-ngu.jpg"}

@@ -108,10 +108,16 @@ const UnpaidInvoice = ({ searchValue }) => {
   };
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpenModify(false);
+    setOpen(false);
+  };
 
   const handleOpenModify = () => setOpenModify(true);
-  const handleCloseModify = () => setOpenModify(false);
+  const handleCloseModify = () => {
+    setOpenModify(false);
+    setOpen(false);
+  };
 
   useEffect(() => {
     async function fetchData() {

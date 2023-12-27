@@ -30,7 +30,7 @@ const routes = [
     ],
   },
   ...sessionRoutes,
-  { path: "/", element: <Navigate to="dashboard/default" /> },
+  { path: "/", element: <Navigate to="apartments" /> },
   { path: "*", element: <NotFound /> },
 ];
 

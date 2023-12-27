@@ -7,11 +7,16 @@ import {
   Checkbox,
   Icon,
   Button,
+  Select,
+  MenuItem,
+  FormControl,
   FormControlLabel,
+  InputLabel,
 } from "@mui/material";
 import { Fragment, useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useEffect } from "react";
+import { useApiData } from "../../apartments-management/useApiData";
 
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -103,7 +108,8 @@ const InvoiceEdit = ({
   handleChange,
   handleChangeCheckbox,
   handleSubmit,
-  data,
+  dataPopup,
+  handleRoomID,
 }) => {
   const { palette } = useTheme();
   const textColor = palette.text.primary;
@@ -113,13 +119,43 @@ const InvoiceEdit = ({
   const [paidStatus, setPaidStatus] = useState(true);
   useEffect(() => {
     const checkPaid = () => {
-      if (data?.pay_at === null) setPaidStatus(false);
+      if (dataPopup?.pay_at === null) setPaidStatus(false);
     };
     checkPaid();
   });
 
   const handleDeleteClick = () => {
     setShowDeletePopup(true);
+  };
+
+  const { data } = useApiData();
+  const [apartments, setApartments] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setApartments(
+        data.map((apartment) => ({
+          name: apartment.name,
+          id: apartment.id,
+          rooms: apartment.rooms,
+        }))
+      );
+    }
+  }, [data]);
+
+  const handleSelectItem = (e) => {
+    const selectedApartment = data.find(
+      (apartment) => apartment.name === e.target.value
+    );
+    setRooms(selectedApartment.rooms);
+  };
+
+  const handleChangeRoom = (e) => {
+    const selectedRoom = rooms.find(
+      (room) => room.room_number === e.target.value
+    );
+    handleRoomID(selectedRoom.id);
   };
 
   return (
@@ -141,8 +177,8 @@ const InvoiceEdit = ({
                   close
                 </Icon>
                 <Title>
-                  {data?.name || "New invoice"} {data?.room || ""}
-                  {data?.apartment_name || ""}
+                  {dataPopup?.name || "New invoice"} {dataPopup?.room || ""}
+                  {dataPopup?.apartment_name || ""}
                 </Title>{" "}
                 <BoxCustomButton item lg={8} md={8} sm={8} xs={8}>
                   <StyledButton
@@ -202,7 +238,7 @@ const InvoiceEdit = ({
                     type="text"
                     name="create_at"
                     id="standard-basic"
-                    value={data?.create_at || ""}
+                    value={dataPopup?.create_at || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Invoice Date"
@@ -212,7 +248,7 @@ const InvoiceEdit = ({
                     type="text"
                     name="deadline"
                     id="standard-basic"
-                    value={data?.deadline || ""}
+                    value={dataPopup?.deadline || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Deadline"
@@ -222,7 +258,7 @@ const InvoiceEdit = ({
                     type="text"
                     name="water"
                     id="standard-basic"
-                    value={data?.water || ""}
+                    value={dataPopup?.water || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Water"
@@ -232,7 +268,7 @@ const InvoiceEdit = ({
                     type="text"
                     name="service"
                     id="standard-basic"
-                    value={data?.service || ""}
+                    value={dataPopup?.service || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Service"
@@ -242,7 +278,7 @@ const InvoiceEdit = ({
                     type="text"
                     name="rent"
                     id="standard-basic"
-                    value={data?.rent || ""}
+                    value={dataPopup?.rent || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Rent"
@@ -252,19 +288,63 @@ const InvoiceEdit = ({
                     type="text"
                     name="electricity"
                     id="standard-basic"
-                    value={data?.electricity || ""}
+                    value={dataPopup?.electricity || ""}
                     onChange={handleChange}
                     errorMessages={["this field is required"]}
                     label="Electricity"
                     validators={["required"]}
                   />
+                  <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item xs={4}>
+                        <InputLabel htmlFor="apartment">Apartment</InputLabel>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <Select
+                          id="apartment"
+                          variant="outlined"
+                          fullWidth
+                          onChange={handleSelectItem}
+                        >
+                          {apartments.map((apartment) => (
+                            <MenuItem value={apartment.name}>
+                              {apartment.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Grid>
+                    </Grid>
+                  </FormControl>
+                  <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item xs={4}>
+                        <InputLabel htmlFor="roomNumber">
+                          Room Number
+                        </InputLabel>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <Select
+                          id="roomNumber"
+                          variant="outlined"
+                          fullWidth
+                          onChange={(e) => handleChangeRoom(e)}
+                        >
+                          {rooms.map((room) => (
+                            <MenuItem value={room.room_number}>
+                              {room.room_number}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Grid>
+                    </Grid>
+                  </FormControl>
                   <Content>
                     <strong>
                       Total:{" "}
-                      {parseInt(data?.rent) +
-                        parseInt(data?.water) +
-                        parseInt(data?.service) +
-                        parseInt(data?.electricity) || "0"}
+                      {parseInt(dataPopup?.rent) +
+                        parseInt(dataPopup?.water) +
+                        parseInt(dataPopup?.service) +
+                        parseInt(dataPopup?.electricity) || "0"}
                     </strong>
                   </Content>
                 </Card>
